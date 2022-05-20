@@ -77,3 +77,13 @@
 .pagination li {
   display: block;
 }
+
+.registerFormRadioGroup {
+  border: 1px solid #C4C4C4 !important;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.registerFormRadioGroup:hover {
+  border-color: #111 !important;
+}

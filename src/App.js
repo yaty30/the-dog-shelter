@@ -3,13 +3,16 @@ import './App.css';
 
 // views
 import HomePage from './views/HomePage'
-import InternalLogin from './components/internal/InternalLogin'
-import ClientLogin from './components/external/ClientLogin'
+import InternalLoginHome from './components/external/LoginHome'
+import MessageBar from './components/general/MessageBar'
 
 function App() {
   return (
-    <HomePage />
-    // <InternalLogin />
+    // <HomePage />
+    <>
+      <MessageBar />
+      <InternalLoginHome />
+    </>
   );
 }
 
