@@ -15,7 +15,7 @@ export default observer(() => {
   const [password, setPassword] = useState("")
 
   return (
-    <Grid container spacing={3} justifyContent="center" alignItems="center" direction="row" style={{ height: '100vh' }}>
+    <Grid container spacing={3} justifyContent="center" alignItems="center" direction="row">
       <Grid item xs={3}>
         <Card>
           <CardMedia

@@ -13,6 +13,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 import RegisterDialog from './RegisterDialog';
+import LoginDialog from './LoginDialog';
+
 import { register as registerDialogStatus } from 'src/states/globalDialogStates';
 import { preFilleEmail } from 'src/states/registerStates';
 
@@ -37,9 +39,7 @@ export default observer(() => {
                             </Button>
                         </Box>
 
-                        <Button style={{ background: '#f1f1f1', width: 100, color: '#49311A', opacity: 0.85 }}>
-                            Login
-                        </Button>
+                        <LoginDialog />
                     </Toolbar>
                 </AppBar>
             </Box>
