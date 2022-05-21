@@ -1,7 +1,7 @@
 import { type } from '@testing-library/user-event/dist/type'
 import { types } from 'mobx-state-tree'
 
-export const preFilleEmail = types
+export const preFillEmail = types
     .model({
         value: types.string
     })

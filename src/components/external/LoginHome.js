@@ -16,7 +16,7 @@ import RegisterDialog from './RegisterDialog';
 import LoginDialog from './LoginDialog';
 
 import { register as registerDialogStatus } from 'src/states/globalDialogStates';
-import { preFilleEmail } from 'src/states/registerStates';
+import { preFillEmail } from 'src/states/registerStates';
 
 import { observer } from 'mobx-react-lite'
 
@@ -62,10 +62,10 @@ export default observer(() => {
                     <div style={{ marginTop: 25 }}>
                         <TextField
                             variant="filled" type="text" label="Email Address"
-                            value={preFilleEmail.value} onChange={(e) => preFilleEmail.setEmail(e.target.value)}
+                            value={preFillEmail.value} onChange={(e) => preFillEmail.setEmail(e.target.value)}
                             style={{ background: '#f1f1f1', borderRadius: 5, width: '100%' }}
                             onKeyPress={(e) => {
-                                if (preFilleEmail.value !== "") {
+                                if (preFillEmail.value !== "") {
                                     e.key === "Enter" && registerDialogStatus.setForm(true)
                                 }
                             }}
@@ -73,7 +73,7 @@ export default observer(() => {
                             InputProps={{
                                 endAdornment:
                                     <InputAdornment position="end">
-                                        {preFilleEmail.value === "" ? <IconButton disabled><NavigateNextIcon /></IconButton> : <RegisterDialog />}
+                                        <RegisterDialog />
                                     </InputAdornment>
                             }}
                         />

@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 
-import { preFilleEmail, registerForm } from 'src/states/registerStates';
+import { preFillEmail, registerForm } from 'src/states/registerStates';
 import { register as registerDialog } from 'src/states/globalDialogStates';
 import { messageBar } from '../../states/generalStates'
 
@@ -30,7 +30,7 @@ export default observer((data) => {
         registerForm.setData(data.data)
         handleClose()
         messageBar.open("Your Charity Worker account has been successfully created!", "success")
-        preFilleEmail.setEmail("")
+        preFillEmail.setEmail("")
         registerDialog.setForm(false)
     }
 

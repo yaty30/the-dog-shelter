@@ -26,7 +26,7 @@ import { observer } from 'mobx-react-lite'
 
 import RegistetTandC from './RegistetTandC';
 import { messageBar } from 'src/states/generalStates';
-import { preFilleEmail } from 'src/states/registerStates';
+import { preFillEmail } from 'src/states/registerStates';
 
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -44,7 +44,7 @@ const getLabel = (text, required) => {
 
 export default observer(() => {
     const [open, setOpen] = useState(false);
-    const [email, setEmail] = useState(preFilleEmail.value);
+    const [email, setEmail] = useState(preFillEmail.value);
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [purpose, setPurpose] = useState('');
@@ -60,7 +60,7 @@ export default observer(() => {
 
     const handleClickOpen = () => {
         registerDialog.setForm(true)
-        console.log(preFilleEmail.value)
+        console.log(preFillEmail.value)
     };
 
     const handleClose = () => {
@@ -73,7 +73,7 @@ export default observer(() => {
 
     const getPreparedData = () => {
         const preparedData = {
-            email: email,
+            email: preFillEmail.value,
             name: name,
             phone: +phone,
             gender: gender,
@@ -89,14 +89,14 @@ export default observer(() => {
 
     const handleSubmitForm = () => {
         registerForm.setData(getPreparedData())
-        preFilleEmail.setEmail("")
+        preFillEmail.setEmail("")
         messageBar.open("Your account has been successfully created!", "success")
         handleClose()
     }
 
     return (
         <div>
-            <IconButton onClick={handleClickOpen}>
+            <IconButton onClick={handleClickOpen} disabled={preFillEmail.value === ""}>
                 <NavigateNextIcon />
             </IconButton>
             <Dialog
@@ -114,15 +114,15 @@ export default observer(() => {
                     <Grid container spacing={3} style={{ padding: 10 }}>
                         <Grid item xs={12}>
                             <TextField
-                                variant="outlined"
-                                value={preFilleEmail.value} label={getLabel("Email Address", true)}
+                                variant="filled"
+                                value={preFillEmail.value} label={getLabel("Email Address", true)}
                                 style={{ width: '100%' }}
-                                onChange={(e) => preFilleEmail.setEmail(e.target.value)}
+                                onChange={(e) => preFillEmail.setEmail(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
-                                variant="outlined"
+                                variant="filled"
                                 value={name} label={getLabel("Name", true)}
                                 style={{ width: '100%' }} type="text"
                                 onChange={(e) => setName(e.target.value)}
@@ -130,7 +130,7 @@ export default observer(() => {
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
-                                variant="outlined"
+                                variant="filled"
                                 value={phone} label={getLabel("Phone", true)}
                                 style={{ width: '100%' }} type="number"
                                 onChange={(e) => setPhone(e.target.value)}
@@ -222,7 +222,7 @@ export default observer(() => {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                variant="outlined"
+                                variant="filled"
                                 value={code} label={getLabel("Sign up code", isStaff === "yes")}
                                 style={{ width: '100%' }} type="text"
                                 onChange={(e) => setCode(e.target.value)}
