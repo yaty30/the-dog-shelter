@@ -32,14 +32,16 @@ import { ContrastSharp } from '@mui/icons-material';
 import { DialogActions } from '@mui/material';
 import { dogList } from 'src/states/dogStates';
 import { editDogData } from 'src/states/dogStates';
+import { breedList } from 'src/utils';
 
 export default observer((datas) => {
     const data = datas.datas
+
     const [open, setOpen] = useState(false);
     const [name, setName] = useState(data.name);
     const [description, setDescription] = useState(data.description);
     const [gender, setGender] = useState(data.gender);
-    const [breed, setBreed] = useState(data.breed);
+    const [breed, setBreed] = useState(breedList()[breedList().findIndex(x => x.name === data.breed)].name);
     const [birthday, setBirthday] = useState(data.birthday);
     const [chipNo, setChipNo] = useState(data.mircochipNo);
     const [seterillsed, setSeterillsed] = useState(data.seterillsed);
@@ -119,6 +121,11 @@ export default observer((datas) => {
             setLoad(false)
         }, 1200)
     }
+
+    const reBreedList = breedList().map(x => ({
+        label: x.name,
+        value: x.name
+    }))
 
     return (
         <>
@@ -200,7 +207,9 @@ export default observer((datas) => {
                                                 )}
                                             </Grid>
                                             <Grid item xs={12} md={6}>
-                                                <TextField label="Breed" style={{ width: '100%' }} variant="outlined" value={breed} onChange={(e) => setBreed(e.target.value)} />
+                                                {SelectMenu(
+                                                    "Breed", breed, (e) => setBreed(e.target.value), reBreedList
+                                                )}
                                             </Grid>
                                             <Grid item xs={12} md={6}>
                                                 <TextField label="Birthday" style={{ width: '100%' }} variant="outlined" value={birthday} onChange={(e) => setBirthday(e.target.value)} />

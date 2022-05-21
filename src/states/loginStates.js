@@ -21,6 +21,11 @@ export const user = types
         loginDate: types.string,
         loginTime: types.string
     })
+    .views(self => ({
+        isClient() {
+            return self.userType === "client"
+        }
+    }))
     .actions(self => ({
         setData(data) {
             self.id = data.id
@@ -28,6 +33,17 @@ export const user = types
             self.userType = data.userType
             self.loginDate = ""
             self.loginTime = ""
+
+            console.log(data)
+        },
+        logout() {
+            self.id = 0
+            self.username = ""
+            self.userType = ""
+            self.loginDate = ""
+            self.loginTime = ""
+
+            login.setLogin(false)
         }
     }))
     .create({

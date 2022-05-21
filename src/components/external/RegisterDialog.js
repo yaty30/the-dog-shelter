@@ -137,7 +137,7 @@ export default observer(() => {
                             />
                         </Grid>
                         <Grid item xs={5}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth variant="filled">
                                 <InputLabel id="demo-simple-select-label">{getLabel("Gender", true)}</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
@@ -152,7 +152,7 @@ export default observer(() => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={7}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth variant="filled">
                                 <InputLabel id="demo-simple-select-label">{getLabel("Have you own a dog before?", true)}</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
@@ -167,7 +167,7 @@ export default observer(() => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth variant="filled">
                                 <InputLabel id="demo-simple-select-label">{getLabel("Register to", true)}</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
@@ -186,7 +186,7 @@ export default observer(() => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={5}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth variant="filled">
                                 <InputLabel id="demo-simple-select-label">{getLabel("Are you over 18", shouldDisabled())}</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
@@ -202,7 +202,7 @@ export default observer(() => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={7}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth variant="filled">
                                 <InputLabel id="demo-simple-select-label">{getLabel("Are you a staff of the Dog Shelter", shouldDisabled())}</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"

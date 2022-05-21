@@ -24,6 +24,8 @@ import { floatingMenu } from 'src/states/floatingMenuStates';
 import { ContrastSharp } from '@mui/icons-material';
 
 import { dogList, editDogData } from 'src/states/dogStates';
+import { user } from 'src/states/loginStates';
+import { breedList } from 'src/utils';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -89,7 +91,7 @@ export default observer((datas) => {
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div" style={{ fontFamily: '"Lexend", sans-serif' }}>
-                            {data.name} {data.id}
+                            {data.name}
                         </Typography>
                         <Typography variant="body2" color="text.secondary" style={{ margin: '25px 0', height: 50 }}>
                             {data.description.substring(0, 121)}...
@@ -108,8 +110,12 @@ export default observer((datas) => {
                 <CardActions>
                     <Button size="small">Share</Button>
                     <Button size="small" onClick={handleClickOpen}>Learn More</Button>
-                    <EditDog datas={data} />
-                    <RemoveDialog data={data.id} />
+                    {user.isClient() ? null :
+                        <>
+                            <EditDog datas={data} />
+                            <RemoveDialog data={data.id} />
+                        </>
+                    }
                 </CardActions>
             </Card>
             <Dialog

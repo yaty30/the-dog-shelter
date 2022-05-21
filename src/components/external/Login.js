@@ -6,13 +6,33 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Grid, CircularProgress, TextField } from '@mui/material';
-
 import { observer } from 'mobx-react-lite'
+import { useNavigate } from "react-router-dom";
+import { user } from '../../states/loginStates'
 
 export default observer(() => {
   const [load, setLoad] = useState(false)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+
+  let navigate = useNavigate()
+
+  const handleLogin = () => {
+    let userData = {
+      id: 0,
+      username: "Tester",
+      userType: username,
+      loginDate: "",
+      loginTime: ""
+    }
+
+    setLoad(true)
+    user.setData(userData)
+    setTimeout(() => {
+      navigate("/home")
+      setLoad(false)
+    }, 1200)
+  }
 
   return (
     <Grid container spacing={3} justifyContent="center" alignItems="center" direction="row">
@@ -41,7 +61,7 @@ export default observer(() => {
             />
             <Button
               variant="contained"
-              onClick={() => setLoad(!load)}
+              onClick={handleLogin}
               style={{ width: '100%' }}
             // disabled={load} 
             >

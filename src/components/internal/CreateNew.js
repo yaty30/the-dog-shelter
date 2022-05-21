@@ -26,6 +26,7 @@ import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternate
 import ScaleRoundedIcon from '@mui/icons-material/ScaleRounded';
 
 import { observer } from 'mobx-react-lite'
+import { breedList } from 'src/utils';
 import { ContrastSharp } from '@mui/icons-material';
 import { DialogActions } from '@mui/material';
 import { dogList } from 'src/states/dogStates';
@@ -130,6 +131,11 @@ export default observer(() => {
         floatingMenu.cancle()
     }
 
+    const reBreedList = breedList().map(x => ({
+        label: x.name,
+        value: x.name
+    }))
+
     return (
         <>
             <Dialog
@@ -201,7 +207,9 @@ export default observer(() => {
                                                 )}
                                             </Grid>
                                             <Grid item xs={12} md={6}>
-                                                <TextField label="Breed" style={{ width: '100%' }} variant="outlined" value={breed} onChange={(e) => setBreed(e.target.value)} />
+                                                {SelectMenu(
+                                                    "Breed", breed, (e) => setBreed(e.target.value), reBreedList
+                                                )}
                                             </Grid>
                                             <Grid item xs={12} md={6}>
                                                 <TextField label="Birthday" style={{ width: '100%' }} variant="outlined" value={birthday} onChange={(e) => setBirthday(e.target.value)} />

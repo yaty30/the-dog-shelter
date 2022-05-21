@@ -15,6 +15,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconButton } from '@mui/material';
+import CurrentUser from './CurrentUser';
 
 const Menu = () => {
     const [state, setState] = useState(false);
@@ -96,10 +97,7 @@ export default function ButtonAppBar() {
                     {menuButtons.map((x, i) =>
                     <Button color="inherit" key={i} style={{ width: 170, color: '#171717' }}>{x}</Button>    
                     )}
-                    {/* <Button color="inherit" style={{ width: 170, textTransform: 'none', color: '#171717' }}>Username</Button> */}
-                    <IconButton style={{marginLeft: 25}}>
-                        <AccountCircleRoundedIcon/>
-                    </IconButton>
+                    <CurrentUser />
                 </Toolbar>
             </AppBar>
         </Box>
