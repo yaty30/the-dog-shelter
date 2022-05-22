@@ -68,6 +68,20 @@
   /* Safari and Chrome */
 }
 
+.chatDialogDiv {
+  margin: 5px;
+  padding: 5px;
+  height: 550px;
+  overflow: auto;
+  text-align: justify;
+}
+
+.chatDialogDiv::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
+}
+
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -86,4 +100,8 @@
 
 .registerFormRadioGroup:hover {
   border-color: #111 !important;
+}
+
+.chatMessage {
+  color: #333 !important;
 }

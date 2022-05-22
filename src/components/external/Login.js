@@ -19,7 +19,7 @@ export default observer(() => {
 
   const handleLogin = () => {
     let userData = {
-      id: 0,
+      id: username === "worker" ? 1 : 0,
       username: "Tester",
       userType: username,
       loginDate: "",
@@ -68,10 +68,6 @@ export default observer(() => {
               {load ? <CircularProgress size={25} style={{ color: '#fff' }} /> : "LOGIN"}
             </Button>
           </CardContent>
-          {/* <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
-          </CardActions> */}
         </Card>
       </Grid>
     </Grid>

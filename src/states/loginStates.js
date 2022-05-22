@@ -33,8 +33,6 @@ export const user = types
             self.userType = data.userType
             self.loginDate = ""
             self.loginTime = ""
-
-            console.log(data)
         },
         logout() {
             self.id = 0

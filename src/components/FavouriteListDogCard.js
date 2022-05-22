@@ -21,9 +21,8 @@ import ScaleRoundedIcon from '@mui/icons-material/ScaleRounded';
 import EditDog from './internal/EditDog'
 import RemoveDialog from './internal/RemoveDialog';
 
-import { observer } from 'mobx-react-lite'
 import { floatingMenu } from 'src/states/floatingMenuStates';
-import { ContrastSharp } from '@mui/icons-material';
+import { ContrastSharp, DataArrayRounded } from '@mui/icons-material';
 
 import { dogList, editDogData } from 'src/states/dogStates';
 import { user } from 'src/states/loginStates';
@@ -31,6 +30,16 @@ import { favouriteList } from 'src/states/favouriteListStates';
 import { breedList } from 'src/utils';
 
 import { IconButton } from '@mui/material';
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+
+import { observer } from 'mobx-react-lite'
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -93,50 +102,67 @@ export default observer((datas) => {
 
     return (
         <>
-            <Card sx={{ maxWidth: 415 }}>
-                {user.isClient() &&
-                    <div style={{ position: 'absolute' }}>
-                        <IconButton onClick={handleFavourite} style={{margin: 5}}>
-                            {favouriteList.onList(data.id) ? <FavoriteIcon style={{ color: '#FA9DC5', fontSize: 30 }} /> : <FavoriteBorderIcon style={{ fontSize: 30}} />}
-                        </IconButton>
-                    </div>
-                }
-                <div onClick={handleClickOpen} style={{ cursor: 'pointer' }}>
-
-                    <CardMedia
-                        component="img"
-                        image={data.profileImage}
-                        height="600"
-                    />
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="div" style={{ fontFamily: '"Lexend", sans-serif' }}>
-                            {data.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary" style={{ margin: '25px 0', height: 50 }}>
-                            {data.description.substring(0, 121)}...
-                        </Typography>
-
-                        <div style={{ marginTop: 15 }}>
-                            <Typography>
-                                <FavoriteRoundedIcon style={{ position: 'relative', top: 4, marginRight: 5, color: '#E6A62D', fontSize: 20 }} /> {getAge()} years old
-                            </Typography>
-                            <Typography>
-                                <ScaleRoundedIcon style={{ position: 'relative', top: 4, marginRight: 5, color: '#E6A62D', fontSize: 20 }} /> {data.weight} pounds
-                            </Typography>
-                        </div>
-                    </CardContent>
-                </div>
-                <CardActions>
-                    <Button size="small">Share</Button>
-                    <Button size="small" onClick={handleClickOpen}>Learn More</Button>
-                    {user.isClient() ? null :
-                        <>
-                            <EditDog datas={data} />
-                            <RemoveDialog data={data.id} />
-                        </>
-                    }
-                </CardActions>
-            </Card>
+            <div>
+                <ListItem alignItems="flex-start">
+                    <ListItemButton onClick={handleClickOpen}>
+                        <ListItemAvatar>
+                            <Avatar alt="Cindy Baker" src={data.profileImage} />
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={data.name}
+                            secondary={
+                                <>
+                                    <Typography
+                                        sx={{ display: 'inline' }}
+                                        component="span"
+                                        variant="body2"
+                                        color="text.primary"
+                                    >
+                                        {data.breed}
+                                    </Typography>
+                                </>
+                            }
+                        />
+                    </ListItemButton>
+                </ListItem>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    fullWidth
+                    maxWidth="sm"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Use Google's location service?"}
+                    </DialogTitle>
+                    <List>
+                        {favouriteList.getList().map((x, i) =>
+                            <ListItem alignItems="flex-start">
+                                <ListItemButton>
+                                    <ListItemAvatar>
+                                        <Avatar alt="Cindy Baker" src={x.profileImage} />
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        primary={x.name}
+                                        secondary={
+                                            <>
+                                                <Typography
+                                                    sx={{ display: 'inline' }}
+                                                    component="span"
+                                                    variant="body2"
+                                                    color="text.primary"
+                                                >
+                                                    {x.breed}
+                                                </Typography>
+                                            </>
+                                        }
+                                    />
+                                </ListItemButton>
+                            </ListItem>
+                        )}
+                        <Divider variant="middle" />
+                    </List>
+                </Dialog>
+            </div>
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -163,6 +189,7 @@ export default observer((datas) => {
                                 <Typography gutterBottom component="div" style={{ fontSize: 45, fontFamily: '"Lexend", sans-serif' }}>
                                     Name: <span style={{ marginLeft: 10 }}>{data.name}</span>
                                 </Typography>
+
                                 <Divider style={{ marginBottom: 25 }} />
                                 <div className="dogDialogDiv">
                                     <Typography gutterBottom component="div" style={{ fontSize: 20, fontFamily: '"Lusitana", serif' }}>

@@ -10,5 +10,18 @@ export const register = types
         }
     }))
     .create({
-        registerForm: false
+        registerForm: false,
+    })
+
+export const instantChat = types
+    .model({
+        instantChat: types.boolean
+    })
+    .actions(self => ({
+        setChat(status) {
+            self.instantChat = status
+        }
+    }))
+    .create({
+        instantChat: false
     })

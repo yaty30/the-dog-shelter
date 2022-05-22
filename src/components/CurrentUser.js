@@ -6,6 +6,7 @@ import { IconButton, CircularProgress } from '@mui/material';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavouriteList from './FavouriteList'
 
 import { useNavigate } from 'react-router-dom';
 
@@ -67,7 +68,7 @@ export default observer(() => {
             >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={handleClose}>Favourite list</MenuItem>
+                {user.isClient() && <FavouriteList />}
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
         </div>

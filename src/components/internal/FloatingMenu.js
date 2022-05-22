@@ -8,6 +8,9 @@ import CreateIcon from '@mui/icons-material/AddBoxRounded';
 import EnhancedEncryptionRoundedIcon from '@mui/icons-material/EnhancedEncryptionRounded';
 import ContentCutRoundedIcon from '@mui/icons-material/ContentCutRounded';
 import CreateNew from './CreateNew';
+import HelpCenterIcon from '@mui/icons-material/HelpCenter';
+
+import ChatDialog from '../instantChat/ChatDialog'
 
 import { user } from 'src/states/loginStates';
 
@@ -15,13 +18,13 @@ import { floatingMenu } from 'src/states/floatingMenuStates';
 import { observer } from 'mobx-react-lite'
 
 const clientActions = [
-    { icon: <ContentCutRoundedIcon />, name: '1', },
+    { icon: <HelpCenterIcon />, name: 'Chat', },
     { icon: <FileCopyIcon />, name: '2', },
 ];
 
 const workerActions = [
     { icon: <CreateIcon />, name: 'Create New', },
-    { icon: <ContentCutRoundedIcon />, name: '1', },
+    { icon: <HelpCenterIcon />, name: 'Chat', },
     { icon: <FileCopyIcon />, name: '2', },
 ];
 
@@ -33,6 +36,7 @@ export default observer(() => {
     return (
         <Box sx={{ height: 320, transform: 'translateZ(0px)', flexGrow: 1 }}>
             <CreateNew />
+            <ChatDialog />
             <SpeedDial
                 ariaLabel="SpeedDial basic"
                 sx={{ position: 'absolute', bottom: 16, right: 16 }}
@@ -60,7 +64,7 @@ export default observer(() => {
                         <SpeedDialAction
                             key={i}
                             icon={action.icon}
-                            tooltipTitle={action.name}
+                            tooltipTitle={action.name === "Chat" ? "Instant Chat" : action.name}
                             onClick={() => handleClick(action.name)}
                         />
                     ))    

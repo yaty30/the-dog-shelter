@@ -694,3 +694,24 @@ export const breedList = () => {
 
     return breeds
 }
+
+
+export const getDatetime = (type) => {
+    let date = new Date()
+    if (type === "date") {
+        return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+    } else {
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+    }
+}
+
+export const randomNumber = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
