@@ -7,8 +7,8 @@ export const login = (data) => {
             if(typeof(res.data) === "string") {
                 return false
             } else {
-                user.setData(res.data)
                 console.log(res.data)
+                user.setData(res.data)
                 return true
             }
         })

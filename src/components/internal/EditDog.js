@@ -33,6 +33,8 @@ import { DialogActions } from '@mui/material';
 import { dogList } from 'src/states/dogStates';
 import { editDogData } from 'src/states/dogStates';
 import { breedList } from 'src/utils';
+import { editDog } from 'src/apis/dogs';
+import { user } from "src/states/loginStates";
 
 export default observer((datas) => {
     const data = datas.datas
@@ -111,12 +113,15 @@ export default observer((datas) => {
             profileImage: image,
             notes: notes,
             size: size,
-            weight: +weight
+            weight: +weight,
+            addedBy: 'system',
+            token: user.getToken()
         }
 
         setLoad(true)
+        editDog(prepareData)
         setTimeout(() => {
-            dogList.editDog(data.id, prepareData)
+            // dogList.editDog(data.id, prepareData)
             setOpen(false)
             setLoad(false)
         }, 1200)

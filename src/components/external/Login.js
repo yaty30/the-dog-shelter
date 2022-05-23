@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { user } from '../../states/loginStates'
 
 import { login } from '../../apis/login'
+import { restoreDogList } from 'src/apis/dogs';
 
 export default observer(() => {
   const [load, setLoad] = useState(false)

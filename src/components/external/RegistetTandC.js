@@ -13,6 +13,7 @@ import { messageBar } from '../../states/generalStates'
 
 
 import { observer } from 'mobx-react-lite'
+import { registration } from 'src/apis/registeration';
 
 export default observer((data) => {
     const [open, setOpen] = useState(false);
@@ -27,11 +28,20 @@ export default observer((data) => {
     };
 
     const handleSubmitForm = () => {
-        registerForm.setData(data.data)
-        handleClose()
-        messageBar.open("Your Charity Worker account has been successfully created!", "success")
-        preFillEmail.setEmail("")
-        registerDialog.setForm(false)
+        registration(data.data).then(x => {
+            if (x) {
+                registerForm.setData(data.data)
+                handleClose()
+                messageBar.open("", "success")
+                preFillEmail.setEmail("")
+                registerDialog.setForm(false)
+                messageBar.open("Your Charity Worker account has been successfully created!", "success")
+            } else {
+                messageBar.open("This email is already registered.", "error")
+            }
+            preFillEmail.setEmail("")
+            handleClose()
+        })
     }
 
     return (

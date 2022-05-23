@@ -7,7 +7,7 @@ export const favouriteList = types
     })
     .views(self => ({
         onList(id) {
-            return self.list.filter(x => x === id).length > 0
+            return self.list.filter(x => x == id).length > 0
         },
         getList() {
             const list = self.list.map(x =>
@@ -18,6 +18,10 @@ export const favouriteList = types
         }
     }))
     .actions(self => ({
+        restoreList(item) {
+            self.list.clear()
+            item.map(x => self.list.push(x))
+        },
         addFavourite(id) {
             self.list.push(id)
 

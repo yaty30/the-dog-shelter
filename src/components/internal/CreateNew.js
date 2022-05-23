@@ -26,10 +26,13 @@ import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternate
 import ScaleRoundedIcon from '@mui/icons-material/ScaleRounded';
 
 import { observer } from 'mobx-react-lite'
-import { breedList } from 'src/utils';
+import { breedList, getImageBase64 } from 'src/utils';
 import { ContrastSharp } from '@mui/icons-material';
 import { DialogActions } from '@mui/material';
 import { dogList } from 'src/states/dogStates';
+
+import { addDog } from 'src/apis/dogs';
+import { user } from 'src/states/loginStates';
 
 export default observer(() => {
     const [open, setOpen] = useState(false);
@@ -45,6 +48,7 @@ export default observer(() => {
     const [size, setSize] = useState("");
     const [notes, setNotes] = useState("");
     const [image, setImage] = useState("");
+    const [imageBase64, setImageBase64] = useState("")
     const [weight, setWeight] = useState("0.0");
 
     const handleClose = () => {
@@ -61,6 +65,7 @@ export default observer(() => {
         setSize("")
         setNotes("")
         setImage("")
+        setImageBase64("")
         setWeight(0)
     };
 
@@ -86,6 +91,9 @@ export default observer(() => {
     const handleUploadImage = (target) => {
         let url = URL.createObjectURL(target)
         // newItem.uploadImage(url)
+        getImageBase64(target).then(data => 
+            setImageBase64(data)
+        )
         setImage(url)
     }
 
@@ -110,7 +118,6 @@ export default observer(() => {
 
     const handleCreate = () => {
         const data = {
-            id: 0,
             name: name,
             gender: gender,
             location: location,
@@ -120,14 +127,14 @@ export default observer(() => {
             mircochipNo: chipNo,
             intake: intake,
             description: description,
-            profileImage: image,
+            profileImage: imageBase64,
             notes: notes,
             size: size,
-            weight: +weight
+            weight: +weight,
+            addedBy: "system",
+            token: user.getToken()
         }
-
-        // console.log(data)
-        dogList.createNew(data)
+        addDog(data)
         floatingMenu.cancle()
     }
 

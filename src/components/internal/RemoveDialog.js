@@ -9,6 +9,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { dogList } from 'src/states/dogStates';
 import { observer } from 'mobx-react-lite'
+import { removeDog } from 'src/apis/dogs';
+import { user } from 'src/states/loginStates';
 
 export default observer((data) => {
     const [open, setOpen] = useState(false);
@@ -24,14 +26,18 @@ export default observer((data) => {
 
     const handleRemove = () => {
         setLoad(true)
+        let removeData = {
+            id: data.data,
+            token: user.getToken()
+        }
+        removeDog(removeData)
         setTimeout(() => {
             setLoad(false)
-            dogList.removeDog(id)
             handleClose()
         }, 1200)
     }
 
-    const id = data.data
+    // const id = data.data
 
     return (
         <div>

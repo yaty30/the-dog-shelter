@@ -31,6 +31,7 @@ import { favouriteList } from 'src/states/favouriteListStates';
 import { breedList } from 'src/utils';
 
 import { IconButton } from '@mui/material';
+import { addFavourite, removeFavourite } from 'src/apis/dogs';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -87,8 +88,19 @@ export default observer((datas) => {
     ]
 
     const handleFavourite = () => {
-        console.log(data.id)
-        favouriteList.onList(data.id) ? favouriteList.removeFavourite(data.id) : favouriteList.addFavourite(data.id)
+        const apiData = {
+            id: `${user.getID()}`,
+            newFavouriteID: data.id
+        }
+        addFavourite(apiData)
+    }
+
+    const handleRemoveFavourite = () => {
+        const apiData = {
+            id: `${user.getID()}`,
+            targetID: data.id
+        }
+        removeFavourite(apiData)
     }
 
     return (
@@ -96,13 +108,18 @@ export default observer((datas) => {
             <Card sx={{ maxWidth: 415 }}>
                 {user.isClient() &&
                     <div style={{ position: 'absolute' }}>
-                        <IconButton onClick={handleFavourite} style={{margin: 5}}>
-                            {favouriteList.onList(data.id) ? <FavoriteIcon style={{ color: '#FA9DC5', fontSize: 30 }} /> : <FavoriteBorderIcon style={{ fontSize: 30}} />}
-                        </IconButton>
+                        {favouriteList.onList(+data.id) ?
+                            <IconButton onClick={handleRemoveFavourite} style={{ margin: 5 }}>
+                                <FavoriteIcon style={{ color: '#FA9DC5', fontSize: 30 }} />
+                            </IconButton>
+                            :
+                            <IconButton onClick={handleFavourite} style={{ margin: 5 }}>
+                                <FavoriteBorderIcon style={{ fontSize: 30 }} />
+                            </IconButton>
+                        }
                     </div>
                 }
                 <div onClick={handleClickOpen} style={{ cursor: 'pointer' }}>
-
                     <CardMedia
                         component="img"
                         image={data.profileImage}

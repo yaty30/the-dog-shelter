@@ -19,6 +19,7 @@ import { dogList, searchDog } from 'src/states/dogStates';
 import { login, user } from 'src/states/loginStates';
 
 import { observer } from 'mobx-react-lite'
+import { getFavouriteList, restoreDogList } from 'src/apis/dogs';
 
 export default observer(() => {
     const [tab, setTab] = useState(0);
@@ -41,6 +42,12 @@ export default observer(() => {
         setTab(newValue);
     };
 
+    useEffect(() => {
+        restoreDogList()
+        getFavouriteList({
+            id: `${user.getID()}`
+        })
+    }, [])
 
     return (
         <div>

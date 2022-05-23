@@ -19,11 +19,18 @@ export const user = types
         username: types.string,
         userType: types.string,
         loginDate: types.string,
-        loginTime: types.string
+        loginTime: types.string,
+        token: types.string
     })
     .views(self => ({
         isClient() {
             return self.userType === "client"
+        },
+        getID() {
+            return self.id
+        },
+        getToken() {
+            return self.userType === "worker" ? self.token : ""
         }
     }))
     .actions(self => ({
@@ -31,8 +38,9 @@ export const user = types
             self.id = data.id
             self.username = data.username
             self.userType = data.userType
-            self.loginDate = ""
-            self.loginTime = ""
+            self.loginDate = data.loginDate
+            self.loginTime = data.loginTime
+            self.token = `${data.token}`
         },
         logout() {
             self.id = 0
@@ -40,6 +48,7 @@ export const user = types
             self.userType = ""
             self.loginDate = ""
             self.loginTime = ""
+            self.token = ""
 
             login.setLogin(false)
         }
@@ -49,5 +58,6 @@ export const user = types
         username: "",
         userType: "",
         loginDate: "",
-        loginTime: ""
+        loginTime: "",
+        token: ""
     })
