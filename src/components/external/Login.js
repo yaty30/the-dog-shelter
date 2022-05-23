@@ -10,6 +10,8 @@ import { observer } from 'mobx-react-lite'
 import { useNavigate } from "react-router-dom";
 import { user } from '../../states/loginStates'
 
+import { login } from '../../apis/login'
+
 export default observer(() => {
   const [load, setLoad] = useState(false)
   const [username, setUsername] = useState("")
@@ -18,20 +20,24 @@ export default observer(() => {
   let navigate = useNavigate()
 
   const handleLogin = () => {
-    let userData = {
-      id: username === "worker" ? 1 : 0,
-      username: "Tester",
-      userType: username,
-      loginDate: "",
-      loginTime: ""
+    let data = {
+      email: username,
+      password: password
     }
 
     setLoad(true)
-    user.setData(userData)
-    setTimeout(() => {
-      navigate("/home")
-      setLoad(false)
-    }, 1200)
+
+    login(data).then(x => {
+      if (x) {
+        setTimeout(() => {
+          navigate("/home")
+        }, 800)
+      }
+      setTimeout(() => {
+        setLoad(false)
+      }, 1200)
+    })
+
   }
 
   return (

@@ -28,6 +28,8 @@ import RegistetTandC from './RegistetTandC';
 import { messageBar } from 'src/states/generalStates';
 import { preFillEmail } from 'src/states/registerStates';
 
+import { registration } from 'src/apis/registeration';
+
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -46,6 +48,7 @@ export default observer(() => {
     const [open, setOpen] = useState(false);
     const [email, setEmail] = useState(preFillEmail.value);
     const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
     const [phone, setPhone] = useState("");
     const [purpose, setPurpose] = useState('');
     const [gender, setGender] = useState("");
@@ -74,6 +77,7 @@ export default observer(() => {
     const getPreparedData = () => {
         const preparedData = {
             email: preFillEmail.value,
+            password: password,
             name: name,
             phone: +phone,
             gender: gender,
@@ -81,17 +85,22 @@ export default observer(() => {
             purpose: purpose,
             isAdult: isAdult === "yes",
             isStaff: isStaff === "yes",
-            signUpCode: code
+            code: code
         }
 
         return preparedData
     }
 
     const handleSubmitForm = () => {
-        registerForm.setData(getPreparedData())
-        preFillEmail.setEmail("")
-        messageBar.open("Your account has been successfully created!", "success")
-        handleClose()
+        registration(getPreparedData()).then(x => {
+            if(x) {
+                messageBar.open("Your account has been successfully created!", "success")
+            } else {
+                messageBar.open("This email is already registered.", "error")
+            }
+            preFillEmail.setEmail("")
+            handleClose()
+        })
     }
 
     return (
@@ -118,6 +127,14 @@ export default observer(() => {
                                 value={preFillEmail.value} label={getLabel("Email Address", true)}
                                 style={{ width: '100%' }}
                                 onChange={(e) => preFillEmail.setEmail(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="filled"
+                                value={password} label={getLabel("Password", true)}
+                                style={{ width: '100%' }} type="text"
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={6}>
