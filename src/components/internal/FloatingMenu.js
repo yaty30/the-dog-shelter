@@ -19,7 +19,7 @@ import { observer } from 'mobx-react-lite'
 
 const clientActions = [
     { icon: <HelpCenterIcon />, name: 'Chat', },
-    { icon: <FileCopyIcon />, name: '2', },
+    // { icon: <FileCopyIcon />, name: '2', },
 ];
 
 const workerActions = [
@@ -50,7 +50,7 @@ export default observer(() => {
                 }}
                 icon={<SpeedDialIcon />}
             >
-                {user.isClient() ?
+                {!!!user.isLogined() || user.isClient() ?
                     clientActions.map((action, i) => (
                         <SpeedDialAction
                             key={i}

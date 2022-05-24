@@ -30,7 +30,7 @@ export default observer((data) => {
     const handleSubmitForm = () => {
         registration(data.data).then(x => {
             if (x) {
-                registerForm.setData(data.data)
+                // registerForm.setData(data.data)
                 handleClose()
                 messageBar.open("", "success")
                 preFillEmail.setEmail("")

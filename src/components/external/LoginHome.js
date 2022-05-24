@@ -17,12 +17,13 @@ import LoginDialog from './LoginDialog';
 
 import { register as registerDialogStatus } from 'src/states/globalDialogStates';
 import { preFillEmail } from 'src/states/registerStates';
+import { useNavigate } from 'react-router-dom';
 
 import { observer } from 'mobx-react-lite'
 
 export default observer(() => {
     const [email, setEmail] = useState("")
-
+    let navigate = useNavigate()
     return (
         <>
             <Box sx={{ flexGrow: 1, paddingTop: 1 }}>
@@ -38,7 +39,7 @@ export default observer(() => {
                                 The Canine Shelter
                             </Button>
                         </Box>
-
+                        <Button onClick={() => navigate("/home")}variant="outlined" color="inherit" style={{ color: '#f1f1f1', marginRight: 30 }}>Just Visit</Button>
                         <LoginDialog />
                     </Toolbar>
                 </AppBar>
@@ -77,6 +78,9 @@ export default observer(() => {
                                     </InputAdornment>
                             }}
                         />
+                    </div>
+                    <div style={{ marginTop: 25 }}>
+                        
                     </div>
                 </Grid>
             </Grid>

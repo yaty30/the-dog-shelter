@@ -11,6 +11,7 @@ import FavouriteList from './FavouriteList'
 import { useNavigate } from 'react-router-dom';
 
 import { user, login } from '../states/loginStates'
+import LoginDialog from './external/LoginDialog'
 
 import { observer } from 'mobx-react-lite'
 
@@ -66,10 +67,16 @@ export default observer(() => {
                     horizontal: 'center',
                 }}
             >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                {user.isLogined() && <MenuItem onClick={handleClose}>Profile</MenuItem>}
+                {user.isLogined() && <MenuItem onClick={handleClose}>My account</MenuItem>}
                 {user.isClient() && <FavouriteList />}
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                {user.isLogined() && <MenuItem onClick={handleLogout}>Logout</MenuItem>}
+                {!!!user.isLogined() && <MenuItem onClick={handleLogout}>Create Account</MenuItem>}
+                {!!!user.isLogined() &&
+                    <MenuItem style={{ width: '100%', textAlign: 'center' }}>
+                        <LoginDialog />
+                    </MenuItem>
+                }
             </Menu>
         </div>
     );

@@ -6,7 +6,7 @@ export const login = types
     })
     .views(self => ({
         Logined() {
-            return self.isLogin
+            return self.isLogin === true
         }
     }))
     .actions(self => ({
@@ -30,6 +30,9 @@ export const user = types
     .views(self => ({
         isClient() {
             return self.userType === "client"
+        },
+        isLogined() {
+            return  self.id !== 0
         },
         getID() {
             return self.id

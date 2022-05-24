@@ -44,13 +44,15 @@ export default observer(() => {
                 maxWidth="sm"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Use Google's location service?"}
+                    My Favorite Dog List
                 </DialogTitle>
                 <List>
                     {favouriteList.getList().map((x, i) =>
-                        <FavouriteListDogCard data={x} />
+                        <>
+                            <FavouriteListDogCard data={x} />
+                            {favouriteList.getList().length > 1 && i !== favouriteList.getList().length - 1 && <Divider variant="middle" />}
+                        </>
                     )}
-                    <Divider variant="middle" />
                 </List>
             </Dialog>
         </div>

@@ -1,4 +1,4 @@
-import react, { useState, forwardRef } from 'react';
+import react, { useState, forwardRef, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ListItemText from '@mui/material/ListItemText';
@@ -13,6 +13,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import Login from './Login'
 import { DialogContent, Grid } from '@mui/material';
+import { user } from 'src/states/loginStates'
 
 import { observer } from 'mobx-react-lite'
 
@@ -30,6 +31,10 @@ export default observer(() => {
     const handleClose = () => {
         setOpen(false);
     };
+
+    useEffect(() => {
+        user.isLogined() && setOpen(false)
+    }, [user.id])
 
     return (
         <div>

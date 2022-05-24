@@ -17,6 +17,9 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconButton } from '@mui/material';
 import CurrentUser from './CurrentUser';
 
+import ContactUsDialog from './ContactUsDialog';
+import AboutDialog from './AboutDialog';
+
 const Menu = () => {
     const [state, setState] = useState(false);
 
@@ -82,7 +85,7 @@ const Menu = () => {
     );
 }
 
-const menuButtons = ["gallery", "about", "contact"]
+// floatingMenuHook
 
 export default function ButtonAppBar() {
     return (
@@ -90,13 +93,13 @@ export default function ButtonAppBar() {
             <AppBar position="static" style={{ background: 'none', boxShadow: 'none', padding: '0 15%' }}>
                 <Toolbar>
                     {/* <Menu /> */}
-                    <img src="https://img.icons8.com/cotton/344/dog-jump--v1.png" width="2%" style={{position: 'relative', bottom: 3, marginRight: 10}} />
+                    <img src="https://img.icons8.com/cotton/344/dog-jump--v1.png" width="2%" style={{ position: 'relative', bottom: 3, marginRight: 10 }} />
                     <Typography component="div" sx={{ flexGrow: 1, color: '#171717' }}>
                         The Shelter
                     </Typography>
-                    {menuButtons.map((x, i) =>
-                    <Button color="inherit" key={i} style={{ width: 170, color: '#171717' }}>{x}</Button>    
-                    )}
+                    <Button color="inherit" style={{ width: 170, color: '#171717' }} onClick={() =>document.getElementById('floatingMenuHook').scrollIntoView()}>gallery</Button>
+                    <AboutDialog />
+                    <ContactUsDialog />
                     <CurrentUser />
                 </Toolbar>
             </AppBar>

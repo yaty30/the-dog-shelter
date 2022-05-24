@@ -43,7 +43,7 @@ export default observer(() => {
     };
 
     useEffect(() => {
-        // restoreDogList()
+        restoreDogList()
         // getFavouriteList({
         //     id: `${user.getID()}`
         // })
