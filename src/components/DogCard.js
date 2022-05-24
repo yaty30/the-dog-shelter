@@ -26,7 +26,7 @@ import { floatingMenu } from 'src/states/floatingMenuStates';
 import { ContrastSharp } from '@mui/icons-material';
 
 import { dogList, editDogData } from 'src/states/dogStates';
-import { user } from 'src/states/loginStates';
+import { login, user } from 'src/states/loginStates';
 import { favouriteList } from 'src/states/favouriteListStates';
 import { breedList } from 'src/utils';
 
@@ -108,7 +108,8 @@ export default observer((datas) => {
             <Card sx={{ maxWidth: 415 }}>
                 {user.isClient() &&
                     <div style={{ position: 'absolute' }}>
-                        {favouriteList.onList(+data.id) ?
+                        {
+                            favouriteList.onList(+data.id) ?
                             <IconButton onClick={handleRemoveFavourite} style={{ margin: 5 }}>
                                 <FavoriteIcon style={{ color: '#FA9DC5', fontSize: 30 }} />
                             </IconButton>
@@ -116,6 +117,7 @@ export default observer((datas) => {
                             <IconButton onClick={handleFavourite} style={{ margin: 5 }}>
                                 <FavoriteBorderIcon style={{ fontSize: 30 }} />
                             </IconButton>
+
                         }
                     </div>
                 }

@@ -48,8 +48,8 @@ export const editDog = (data) => {
         })
 }
 
-export const getFavouriteList = (data) => {
-    return fetch("post", "/dog/favouriteList/getList", data)
+export const getFavouriteList = (id) => {
+    return fetch("get", `/dog/favouriteList/getList?id=${id}`)
         .then((res) => {
             console.log(res.data)
             favouriteList.restoreList(res.data)

@@ -43,10 +43,10 @@ export default observer(() => {
     };
 
     useEffect(() => {
-        restoreDogList()
-        getFavouriteList({
-            id: `${user.getID()}`
-        })
+        // restoreDogList()
+        // getFavouriteList({
+        //     id: `${user.getID()}`
+        // })
     }, [])
 
     return (

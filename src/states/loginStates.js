@@ -4,6 +4,11 @@ export const login = types
     .model({
         isLogin: types.boolean
     })
+    .views(self => ({
+        Logined() {
+            return self.isLogin
+        }
+    }))
     .actions(self => ({
         setLogin(login) {
             self.isLogin = login
@@ -41,6 +46,8 @@ export const user = types
             self.loginDate = data.loginDate
             self.loginTime = data.loginTime
             self.token = `${data.token}`
+
+            login.setLogin(true)
         },
         logout() {
             self.id = 0
