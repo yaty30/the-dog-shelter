@@ -53,7 +53,7 @@ export const user = types
             login.setLogin(true)
         },
         logout() {
-            self.id = 0
+            self.id = -1
             self.username = ""
             self.userType = ""
             self.loginDate = ""
@@ -64,7 +64,7 @@ export const user = types
         }
     }))
     .create({
-        id: 0,
+        id: -1,
         username: "",
         userType: "",
         loginDate: "",

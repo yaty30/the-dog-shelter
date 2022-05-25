@@ -148,7 +148,7 @@ export default observer((datas) => {
                 <CardActions>
                     <Button size="small">Share</Button>
                     <Button size="small" onClick={handleClickOpen}>Learn More</Button>
-                    {!!!user.isLogined() || user.isClient() ? null :
+                    {login.isLogin === false ? null : user.isClient() ? null :
                         <>
                             <EditDog datas={data} />
                             <RemoveDialog data={data.id} />

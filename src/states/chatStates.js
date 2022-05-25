@@ -1,16 +1,18 @@
 import { types } from 'mobx-state-tree'
-import { user } from './loginStates'
+import { login, user } from './loginStates'
 import { getDatetime, randomNumber } from 'src/utils'
 
 const messageData = types
     .model({
-        chatID: types.number,
+        chatID: types.string,
         messageID: types.number,
         message: types.string,
+        clientID: types.number,
+        expired: types.boolean,
+        workerID: types.number,
+        sendTime: types.string,
         date: types.string,
         time: types.string,
-        sendBy: types.number,
-        workerID: types.number
     })
 
 export const messages = types
@@ -24,10 +26,10 @@ export const messages = types
         },
         getClientByChatID(id) {
             let list = self.list.filter(x => x.chatID === id)
-            return list[0].sendBy
+            return list[0].clientID
         },
         getRooms() {
-            const messages = self.list.filter(x => x.workerID === 1) //user.id
+            const messages = self.list 
             const roomsPre = messages.map(x => ({
                 chatID: x.chatID,
                 messages: []
@@ -41,7 +43,7 @@ export const messages = types
             return roomList
         },
         getMessage() {
-            const messages = self.list.filter(x => x.workerID === 1) //user.id
+            const messages = self.list 
             let list = self.getRooms()
             
             messages.map(x =>
@@ -51,7 +53,7 @@ export const messages = types
                     message: x.message,
                     date: x.date,
                     time: x.time,
-                    sendBy: x.sendBy,
+                    clientID: x.clientID,
                     workerID: x.workerID
                 })
             )
@@ -60,6 +62,11 @@ export const messages = types
         }
     }))
     .actions(self => ({
+        restoreMessage(data) {
+            data.forEach(item =>
+                self.list.push(item)    
+            )
+        },
         sendMessage(data) {
             console.log(data)
             self.list.push({
@@ -68,7 +75,7 @@ export const messages = types
                 message: data.message,
                 date: getDatetime("date"),
                 time: getDatetime("time"),
-                sendBy: user.id,
+                clientID: user.id,
                 workerID: data.workerID
             })
         },
@@ -83,85 +90,15 @@ export const messages = types
     .create({
         list: [
             {
-                chatID: 111,
+                chatID: "PqSFoijsafWEOPKW",
                 messageID: 93101,
                 message: "test1",
+                clientID: 1,
+                expired: false,
+                workerID: 1,
+                sendTime: "8:25 PM",
                 date: "",
-                time: "8:23 PM",
-                sendBy: 1,
-                workerID: 1
-            },
-            {
-                chatID: 324,
-                messageID: 123,
-                message: "test2",
-                date: "",
-                time: "8:23 PM",
-                sendBy: 0,
-                workerID: 1
-            },
-            {
-                chatID: 324,
-                messageID: 32423,
-                message: "test3",
-                date: "",
-                time: "8:23 PM",
-                sendBy: 0,
-                workerID: 1
-            },
-            {
-                chatID: 324,
-                messageID: 29341234,
-                message: "test4",
-                date: "",
-                time: "8:23 PM",
-                sendBy: 0,
-                workerID: 1
-            },
-            {
-                chatID: 324,
-                messageID: 4234234,
-                message: "test5",
-                date: "",
-                time: "8:23 PM",
-                sendBy: 0,
-                workerID: 1
-            },
-            {
-                chatID: 111,
-                messageID: 45235,
-                message: "test6",
-                date: "",
-                time: "8:23 PM",
-                sendBy: 0,
-                workerID: 1
-            },
-            {
-                chatID: 111,
-                messageID: 2341234,
-                message: "test7",
-                date: "",
-                time: "8:23 PM",
-                sendBy: 1,
-                workerID: 1
-            },
-            {
-                chatID: 324,
-                messageID: 9314401,
-                message: "test8",
-                date: "",
-                time: "8:23 PM",
-                sendBy: 1,
-                workerID: 1
-            },
-            {
-                chatID: 111,
-                messageID: 931121101,
-                message: "test9",
-                date: "",
-                time: "8:23 PM",
-                sendBy: 1,
-                workerID: 1
-            },
+                time: "",
+            }
         ]
     })

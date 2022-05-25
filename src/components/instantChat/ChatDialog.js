@@ -14,6 +14,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
+import StartNewChat from './StartNewChat'
 
 import { messages } from 'src/states/chatStates';
 
@@ -85,17 +86,18 @@ export default observer(() => {
     const DeleteButton = (id) => {
         return (
             <IconButton onClick={() => messages.deleteMessage(id.id)}>
-                <DeleteForeverRoundedIcon style={{fontSize: 23, color: '#fff'}} />
+                <DeleteForeverRoundedIcon style={{ fontSize: 23, color: '#fff' }} />
             </IconButton>
         )
     }
-    let data = {
-        chatID: messages.getRooms()[tab].chatID,
-        message: msg,
-        workerID: user.id
-    }
 
     const handleSendMessage = () => {
+        let data = {
+            chatID: messages.getRooms()[tab].chatID,
+            message: msg,
+            workerID: user.id
+        }
+
         messages.sendMessage(data)
         setMsg("")
     }
@@ -108,71 +110,86 @@ export default observer(() => {
                 fullWidth
                 maxWidth="md"
             >
-                <DialogTitle id="alert-dialog-title">
-                    <Box sx={{ width: '100%' }}>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <Tabs value={tab} onChange={handleChange} aria-label="basic tabs example">
-                                {messages.getRooms().map((x, i) =>
-                                    <Tab label={`Chat Room: ${x.chatID}`} {...a11yProps(i)} />
-                                )}
-                            </Tabs>
-                        </Box>
-                    </Box>
-                </DialogTitle>
-                <DialogContent style={{ padding: '10px 35px', overflow: 'hidden' }}>
-                    <Grid container spacing={3} className="chatDialogDiv">
-                        <Grid item xs={12}>
-                            {messages.getRooms().map((x, i) =>
-                                <TabPanel value={tab} index={i}>
-                                    <Grid container spacing={3}>
-                                        {messages.getMessageByChatID(messages.getRooms()[i].chatID)[0].messages.map((m, mi) =>
-                                            <>
-                                                {m.sendBy === user.id && <Grid item xs={7} />}
-                                                <Grid item xs={5} style={{ textAlign: m.sendBy === user.id ? 'right' : 'left' }}>
-                                                    <Tooltip title={user.isClient() ? "" : <DeleteButton id={m.messageID} />} placement={m.sendBy === user.id ? "right" : "left"} arrow disabled>
-                                                        <TextField
-                                                            variant="outlined" size="small"
-                                                            style={{ width: '100%', cursor: 'default', background: '#f1f1f1' }}
-                                                            className="chatMessage"
-                                                            InputProps={{
-                                                                readOnly: true
-                                                            }}
-                                                            multiline value={`${m.message}`}
-                                                        />
-                                                    </Tooltip>
-                                                    <Typography style={{ color: '#aaa', fontSize: 11, padding: '0 5px', marginTop: 3, textTransform: 'uppercase'  }}>{m.time}</Typography>
-                                                </Grid>
-                                                {m.sendBy !== user.id && <Grid item xs={7} />}
-                                            </>
-                                        )}
-                                    </Grid>
-                                </TabPanel>
-                            )}
+                <DialogContent>{JSON.stringify(messages.getRooms())}</DialogContent>
+                {console.log(JSON.stringify(messages.list))}
+                {messages.getRooms().length === 0 ?
+                    <DialogContent>
+                        <Grid container spacing={3} direction="row" justifyContent="center" alignItems="center" style={{ height: 500 }}>
+                            <Grid item xs={12} style={{ textAlign: 'center' }}>
+                                <StartNewChat />
+                            </Grid>
                         </Grid>
+                    </DialogContent>
+                    :
+                    <>
+                        <DialogTitle id="alert-dialog-title">
+                            <Box sx={{ width: '100%' }}>
+                                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                    <Tabs value={tab} onChange={handleChange} aria-label="basic tabs example">
+                                        {messages.getRooms().map((x, i) =>
+                                            <Tab label={`Chat Room: ${x.chatID}`} {...a11yProps(i)} />
+                                        )}
+                                    </Tabs>
+                                </Box>
+                            </Box>
+                        </DialogTitle>
+                        <DialogContent style={{ padding: '10px 35px', overflow: 'hidden' }}>
+                            <Grid container spacing={3} className="chatDialogDiv">
+                                <Grid item xs={12}>
+                                    {messages.getRooms().map((x, i) =>
+                                        <TabPanel value={tab} index={i}>
+                                            <Grid container spacing={3}>
+                                                {messages.getMessageByChatID(messages.getRooms()[i].chatID)[0].messages.map((m, mi) =>
+                                                    <>
+                                                        {m.sendBy === user.id && <Grid item xs={7} />}
+                                                        <Grid item xs={5} style={{ textAlign: m.sendBy === user.id ? 'right' : 'left' }}>
+                                                            <Tooltip title={user.isClient() ? "" : <DeleteButton id={m.messageID} />} placement={m.sendBy === user.id ? "right" : "left"} arrow disabled>
+                                                                <TextField
+                                                                    variant="outlined" size="small"
+                                                                    style={{ width: '100%', cursor: 'default', background: '#f1f1f1' }}
+                                                                    className="chatMessage"
+                                                                    InputProps={{
+                                                                        readOnly: true
+                                                                    }}
+                                                                    multiline value={`${m.message}`}
+                                                                />
+                                                            </Tooltip>
+                                                            <Typography style={{ color: '#aaa', fontSize: 11, padding: '0 5px', marginTop: 3, textTransform: 'uppercase' }}>{m.time}</Typography>
+                                                        </Grid>
+                                                        {m.sendBy !== user.id && <Grid item xs={7} />}
+                                                    </>
+                                                )}
+                                            </Grid>
+                                        </TabPanel>
+                                    )}
+                                </Grid>
 
-                    </Grid>
-                    <Divider style={{ marginTop: 15, position: 'relative', top: 10 }} />
-                </DialogContent>
-                <DialogActions>
-                    <div style={{ padding: '10px 15px', width: '100%' }}>
-                        <TextField
-                            label="Message"
-                            id="outlined-start-adornment"
-                            sx={{ width: '100%' }}
-                            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                            value={msg}
-                            onChange={(e) => setMsg(e.target.value)}
-                            InputProps={{
-                                endAdornment:
-                                    <InputAdornment position="end">
-                                        <IconButton onClick={handleSendMessage}>
-                                            <SendRoundedIcon />
-                                        </IconButton>
-                                    </InputAdornment>
-                            }}
-                        />
-                    </div>
-                </DialogActions>
+                            </Grid>
+                            <Divider style={{ marginTop: 15, position: 'relative', top: 10 }} />
+                        </DialogContent>
+                        <DialogActions>
+                            <div style={{ padding: '10px 15px', width: '100%' }}>
+                                <TextField
+                                    label="Message"
+                                    id="outlined-start-adornment"
+                                    sx={{ width: '100%' }}
+                                    onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                                    value={msg}
+                                    onChange={(e) => setMsg(e.target.value)}
+                                    InputProps={{
+                                        endAdornment:
+                                            <InputAdornment position="end">
+                                                <IconButton onClick={handleSendMessage}>
+                                                    <SendRoundedIcon />
+                                                </IconButton>
+                                            </InputAdornment>
+                                    }}
+                                />
+                            </div>
+                        </DialogActions>
+                    </>
+                }
+
             </Dialog>
         </div>
     );

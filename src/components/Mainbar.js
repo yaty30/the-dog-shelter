@@ -19,6 +19,7 @@ import CurrentUser from './CurrentUser';
 
 import ContactUsDialog from './ContactUsDialog';
 import AboutDialog from './AboutDialog';
+import { login } from 'src/states/loginStates';
 
 const Menu = () => {
     const [state, setState] = useState(false);

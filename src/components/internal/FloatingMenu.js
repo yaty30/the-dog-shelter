@@ -12,7 +12,7 @@ import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 
 import ChatDialog from '../instantChat/ChatDialog'
 
-import { user } from 'src/states/loginStates';
+import { login, user } from 'src/states/loginStates';
 
 import { floatingMenu } from 'src/states/floatingMenuStates';
 import { observer } from 'mobx-react-lite'
@@ -50,7 +50,7 @@ export default observer(() => {
                 }}
                 icon={<SpeedDialIcon />}
             >
-                {!!!user.isLogined() || user.isClient() ?
+                {login.isLogin === false || user.isClient() ?
                     clientActions.map((action, i) => (
                         <SpeedDialAction
                             key={i}

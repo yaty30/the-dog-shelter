@@ -67,12 +67,12 @@ export default observer(() => {
                     horizontal: 'center',
                 }}
             >
-                {user.isLogined() && <MenuItem onClick={handleClose}>Profile</MenuItem>}
-                {user.isLogined() && <MenuItem onClick={handleClose}>My account</MenuItem>}
+                {login.isLogin && <MenuItem onClick={handleClose}>Profile</MenuItem>}
+                {login.isLogin && <MenuItem onClick={handleClose}>My account</MenuItem>}
                 {user.isClient() && <FavouriteList />}
-                {user.isLogined() && <MenuItem onClick={handleLogout}>Logout</MenuItem>}
-                {!!!user.isLogined() && <MenuItem onClick={handleLogout}>Create Account</MenuItem>}
-                {!!!user.isLogined() &&
+                {login.isLogin && <MenuItem onClick={handleLogout}>Logout</MenuItem>}
+                {!!!login.isLogin && <MenuItem onClick={handleLogout}>Create Account</MenuItem>}
+                {!!!login.isLogin &&
                     <MenuItem style={{ width: '100%', textAlign: 'center' }}>
                         <LoginDialog />
                     </MenuItem>

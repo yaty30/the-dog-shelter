@@ -28,9 +28,13 @@ export default observer(() => {
                             Your Help!
                         </Typography>
                         <Typography style={{ color: '#292929', fontWeight: 'bold', fontSize: 15, width: '70%' }}>
-                            You can chip in with money & effort!  Elder, Young and Even a Baby dog. Adopt Any Dog You Like!
+                            {`You can chip in with money & effort!  Elder, Young and Even a Baby dog. Adopt Any Dog You Like!`}
                         </Typography>
-                        <Button variant="contained" size="large" style={{ marginTop: 45, background: '#E6A62D', fontWeight: 'bold', height: 50, width: 180 }}>
+                        <Button 
+                            variant="contained" size="large" 
+                            onClick={() =>document.getElementById('floatingMenuHook').scrollIntoView()} 
+                            style={{ marginTop: 45, background: '#E6A62D', fontWeight: 'bold', height: 50, width: 180 }}
+                        >
                             Browse Now
                         </Button>
                     </Grid>

@@ -20,6 +20,7 @@ import { preFillEmail } from 'src/states/registerStates';
 import { useNavigate } from 'react-router-dom';
 
 import { observer } from 'mobx-react-lite'
+import { login } from 'src/states/loginStates';
 
 export default observer(() => {
     const [email, setEmail] = useState("")
@@ -39,7 +40,10 @@ export default observer(() => {
                                 The Canine Shelter
                             </Button>
                         </Box>
-                        <Button onClick={() => navigate("/home")}variant="outlined" color="inherit" style={{ color: '#f1f1f1', marginRight: 30 }}>Just Visit</Button>
+                        <Button onClick={() => {
+                            navigate("/home")
+                            login.setLogin(false)
+                        }} variant="outlined" color="inherit" style={{ color: '#f1f1f1', marginRight: 30 }}>Just Visit</Button>
                         <LoginDialog />
                     </Toolbar>
                 </AppBar>
@@ -80,7 +84,7 @@ export default observer(() => {
                         />
                     </div>
                     <div style={{ marginTop: 25 }}>
-                        
+
                     </div>
                 </Grid>
             </Grid>
