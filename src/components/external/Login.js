@@ -12,6 +12,8 @@ import { user } from '../../states/loginStates'
 
 import { login } from '../../apis/login'
 import { restoreDogList, getFavouriteList } from 'src/apis/dogs';
+import { getMessageByID } from 'src/apis/chat';
+import { cesar } from 'src/utils';
 
 export default observer(() => {
   const [load, setLoad] = useState(false)
@@ -23,7 +25,7 @@ export default observer(() => {
   const handleLogin = () => {
     let data = {
       email: username,
-      password: password
+      password: btoa(password)
     }
 
     setLoad(true)

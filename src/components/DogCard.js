@@ -58,11 +58,21 @@ export default observer((datas) => {
     const date = new Date()
 
     const addSpace = (val) => {
-        const one = val.substring(0, 3)
-        const two = val.substring(3, 6)
-        const three = val.substring(6, 9)
+        const one = val.replaceAll(" ", "").substring(0, 3)
+        const two = val.replaceAll(" ", "").substring(3, 6)
+        const three = val.replaceAll(" ", "").substring(6, 9)
 
-        return `${one} ${two} ${three}`
+        if (val.length === 3) {
+            return `${one} `
+        }
+        if (val.length === 7) {
+            return `${one} ${two} `
+        }
+        if (val.length > 7) {
+            return `${one} ${two} ${three}`
+        }
+
+        return val
     }
 
     const getAge = () => {
@@ -76,6 +86,8 @@ export default observer((datas) => {
         return age;
     }
 
+    const intake = [{ label: "Rescue from Stray", value: "stray" }, { label: "Rescued by Inspectors", value: "inspectors" }, { label: "SBO - No idea to take care", value: "SBO" }]
+
     const list = [
         { label: "Gender", value: data.gender, set: "" },
         { label: "Breed", value: data.breed, set: "" },
@@ -83,7 +95,7 @@ export default observer((datas) => {
         { label: "Size", value: data.size === "L" ? "Large" : data.size === "M" ? "Medium" : "Small", set: "" },
         { label: "Mircochip No", value: addSpace(data.mircochipNo), set: "" },
         { label: "Seterillsed", value: data.seterillsed ? "Yes" : "No", set: "" },
-        { label: "Intake", value: data.intake, set: "" },
+        { label: "Intake", value: intake[intake.findIndex(x => x.value === data.intake)].label, set: "" },
         { label: "Location", value: data.location, set: "" },
     ]
 
@@ -110,13 +122,13 @@ export default observer((datas) => {
                     <div style={{ position: 'absolute' }}>
                         {
                             favouriteList.onList(+data.id) ?
-                            <IconButton onClick={handleRemoveFavourite} style={{ margin: 5 }}>
-                                <FavoriteIcon style={{ color: '#FA9DC5', fontSize: 30 }} />
-                            </IconButton>
-                            :
-                            <IconButton onClick={handleFavourite} style={{ margin: 5 }}>
-                                <FavoriteBorderIcon style={{ fontSize: 30 }} />
-                            </IconButton>
+                                <IconButton onClick={handleRemoveFavourite} style={{ margin: 5 }}>
+                                    <FavoriteIcon style={{ color: '#FA9DC5', fontSize: 30 }} />
+                                </IconButton>
+                                :
+                                <IconButton onClick={handleFavourite} style={{ margin: 5 }}>
+                                    <FavoriteBorderIcon style={{ fontSize: 30 }} />
+                                </IconButton>
 
                         }
                     </div>

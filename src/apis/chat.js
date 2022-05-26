@@ -16,3 +16,23 @@ export const getMessages = (chatID) => {
             return res
         })
 }
+
+export const getMessageByID = (id) => {
+    console.log(id)
+    return fetch("get", `/chat/clientGetMessagesByID?clientID=${id}`)
+        .then(res => {
+            console.log(res.data)
+            messages.restoreMessage(res.data)
+            return res
+        })
+}
+
+export const getWorkerMessageByID = (id) => {
+    console.log(id)
+    return fetch("get", `/chat/workerGetMessagesByID?workerID=${id}`)
+        .then(res => {
+            console.log(res.data)
+            messages.restoreMessage(res.data)
+            return res
+        })
+}

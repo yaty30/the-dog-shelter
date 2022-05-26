@@ -1,4 +1,4 @@
-import react, { useState } from 'react'
+import react, { useState, useEffect } from 'react'
 import { Grid, InputAdornment, Button, Typography, TextField } from '@mui/material'
 
 import Card from '@mui/material/Card';
@@ -25,11 +25,15 @@ import { login } from 'src/states/loginStates';
 export default observer(() => {
     const [email, setEmail] = useState("")
     let navigate = useNavigate()
+    useEffect(() => {
+        setEmail("")
+    }, [])
+    const emailFilter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return (
         <>
             <Box sx={{ flexGrow: 1, paddingTop: 1 }}>
                 <div style={{ position: 'absolute', top: 0, zIndex: 1, height: '100vh' }}>
-                    <div style={{ width: '100%', height: '100%', background: 'black', position: 'absolute', zIndex: 2, opacity: 0.5 }}>123</div>
+                    <div style={{ width: '100%', height: '100%', background: 'black', position: 'absolute', zIndex: 2, opacity: 0.5 }}>1</div>
                     <img src="https://wallpaperboat.com/wp-content/uploads/2019/04/cute-dog-wallpaper-picture-010.jpg" width="100%" style={{ height: '100vh' }} />
                 </div>
                 <AppBar position="static" style={{ background: 'none', boxShadow: 'none', position: 'absolute', zIndex: 2 }}>
@@ -78,7 +82,7 @@ export default observer(() => {
                             InputProps={{
                                 endAdornment:
                                     <InputAdornment position="end">
-                                        <RegisterDialog />
+                                        {emailFilter.test(preFillEmail.value) && <RegisterDialog />}
                                     </InputAdornment>
                             }}
                         />

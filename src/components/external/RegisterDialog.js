@@ -49,6 +49,7 @@ export default observer(() => {
     const [email, setEmail] = useState(preFillEmail.value);
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
+    const [repassword, setRePassword] = useState("");
     const [phone, setPhone] = useState("");
     const [purpose, setPurpose] = useState('');
     const [gender, setGender] = useState("");
@@ -68,7 +69,18 @@ export default observer(() => {
 
     const handleClose = () => {
         registerDialog.setForm(false)
+        preFillEmail.setEmail("")
+        setPassword("")
+        setName("")
+        setPhone("")
+        setGender("")
+        setIsAdult("")
+        setOwn("")
+        setIsStaff("")
+        setCode("")
     };
+
+    const emailFilter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     const shouldDisabled = () => {
         return !!!(purpose === "adopt" || purpose === "")
@@ -77,7 +89,7 @@ export default observer(() => {
     const getPreparedData = () => {
         const preparedData = {
             email: preFillEmail.value,
-            password: password,
+            password: btoa(password),
             name: name,
             phone: +phone,
             gender: gender,
@@ -93,7 +105,7 @@ export default observer(() => {
 
     const handleSubmitForm = () => {
         registration(getPreparedData()).then(x => {
-            if(x) {
+            if (x) {
                 messageBar.open("Your account has been successfully created!", "success")
             } else {
                 messageBar.open("This email is already registered.", "error")
@@ -131,10 +143,30 @@ export default observer(() => {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                variant="filled"
+                                variant="filled" type="password"
                                 value={password} label={getLabel("Password", true)}
-                                style={{ width: '100%' }} type="text"
+                                style={{ width: '100%' }}
                                 onChange={(e) => setPassword(e.target.value)}
+                                inputProps={{
+                                    autocomplete: 'new-password',
+                                    form: {
+                                        autocomplete: 'off',
+                                    },
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="filled" type="password"
+                                value={repassword} label={getLabel("Re-Password", true)}
+                                style={{ width: '100%' }}
+                                onChange={(e) => setRePassword(e.target.value)}
+                                inputProps={{
+                                    autocomplete: 'new-password',
+                                    form: {
+                                        autocomplete: 'off',
+                                    },
+                                }}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -255,7 +287,14 @@ export default observer(() => {
                     {shouldDisabled() ?
                         <RegistetTandC data={getPreparedData()} />
                         :
-                        <Button onClick={handleSubmitForm} autoFocus>
+                        <Button
+                            onClick={handleSubmitForm} autoFocus
+                            disabled={
+                                email === "" || password === "" || repassword === "" || name === "" ||
+                                phone === "" || gender === "" || own === "" || purpose === "" || !!!(password === repassword) ||
+                                emailFilter.test(preFillEmail.email)
+                            }
+                        >
                             Continue
                         </Button>
                     }

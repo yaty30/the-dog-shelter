@@ -13,6 +13,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
+import DogListAutocomplete from '../DogListAutocomplete';
 
 import Dialog from '@mui/material/Dialog';
 import Tooltip from '@mui/material/Tooltip';
@@ -28,22 +29,27 @@ import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternate
 import ScaleRoundedIcon from '@mui/icons-material/ScaleRounded';
 
 import { observer } from 'mobx-react-lite'
+import { autocompleteDogList } from 'src/states/dogStates';
 import { ContrastSharp } from '@mui/icons-material';
 import { DialogActions } from '@mui/material';
 import { dogList } from 'src/states/dogStates';
 import { editDogData } from 'src/states/dogStates';
-import { breedList } from 'src/utils';
+import { breedList, getToday } from 'src/utils';
 import { editDog } from 'src/apis/dogs';
 import { user } from "src/states/loginStates";
 
 export default observer((datas) => {
     const data = datas.datas
 
+    useEffect(() => {
+        autocompleteDogList.setBreed(data.breed)
+    }, [])
+
     const [open, setOpen] = useState(false);
     const [name, setName] = useState(data.name);
     const [description, setDescription] = useState(data.description);
     const [gender, setGender] = useState(data.gender);
-    const [breed, setBreed] = useState(breedList()[breedList().findIndex(x => x.name === data.breed)].name);
+    const [breed, setBreed] = useState("");
     const [birthday, setBirthday] = useState(data.birthday);
     const [chipNo, setChipNo] = useState(data.mircochipNo);
     const [seterillsed, setSeterillsed] = useState(data.seterillsed);
@@ -105,7 +111,7 @@ export default observer((datas) => {
             gender: gender,
             location: location,
             seterillsed: seterillsed,
-            breed: breed,
+            breed: autocompleteDogList.breed,
             birthday: birthday,
             mircochipNo: chipNo,
             intake: intake,
@@ -212,12 +218,26 @@ export default observer((datas) => {
                                                 )}
                                             </Grid>
                                             <Grid item xs={12} md={6}>
-                                                {SelectMenu(
+                                                {/* {SelectMenu(
                                                     "Breed", breed, (e) => setBreed(e.target.value), reBreedList
-                                                )}
+                                                )} */}
+                                                <DogListAutocomplete edit={{ edit: true, val: data.breed }} />
                                             </Grid>
                                             <Grid item xs={12} md={6}>
-                                                <TextField label="Birthday" style={{ width: '100%' }} variant="outlined" value={birthday} onChange={(e) => setBirthday(e.target.value)} />
+                                                <TextField
+                                                    type="date" style={{ width: '100%' }}
+                                                    variant="outlined" onKeyDown={(e) => e.key === "Backspace" && setBirthday("")}
+                                                    value={birthday} onChange={(e) => {
+                                                        console.log(e.target.value)
+                                                        setBirthday(e.target.value)
+                                                    }}
+                                                    InputProps={{
+                                                        inputProps: {
+                                                            min: "2000-01-01",
+                                                            max: getToday()
+                                                        }
+                                                    }}
+                                                />
                                             </Grid>
                                             <Grid item xs={12} md={6}>
                                                 <TextField
@@ -253,7 +273,10 @@ export default observer((datas) => {
                                                 />
                                             </Grid>
                                             <Grid item xs={12} md={6}>
-                                                <TextField label="Intake" style={{ width: '100%' }} variant="outlined" value={intake} onChange={(e) => setIntake(e.target.value)} />
+                                                {SelectMenu(
+                                                    "Intake", intake, (e) => setIntake(e.target.value),
+                                                    [{ label: "Rescue from Stray", value: "stray" }, { label: "Rescued by Inspectors", value: "inspectors" }, { label: "SBO - No idea to take care", value: "SBO" }]
+                                                )}
                                             </Grid>
                                             <Grid item xs={12} md={6}>
                                                 {SelectMenu(
@@ -277,7 +300,7 @@ export default observer((datas) => {
                         style={{ marginRight: 15, marginBottom: 10, width: 130 }}
                         disabled={
                             name === "" || gender === "" || location === "" || seterillsed === "" ||
-                            breed === "" || birthday === "" || chipNo === "" || intake === "" ||
+                            autocompleteDogList.breed === "" || birthday === "" || chipNo === "" || intake === "" ||
                             description === "" || image === "" || size === "" || weight === "" || load
                         }
                         variant="contained"

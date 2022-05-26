@@ -29,6 +29,9 @@ export const addDog = (data) => {
     return fetch("post", "/dog/addDog", data)
         .then((x) => {
             restoreDogList()
+
+            console.log(x)
+            return x
         })
 }
 

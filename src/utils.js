@@ -729,10 +729,38 @@ export const randomNumber = (min, max) => {
 
 export const getImageBase64 = (file) => {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
     });
-  }
-  
+}
+
+
+export const cesar = (str, amount) => {
+    if (amount < 0)
+        return cesar(str, amount + 26);
+
+    var res = '';
+    for (var i = 0; i < str.length; i++) {
+        var c = str[i];
+        if (c.match(/[a-z]/i)) {
+            var code = str.charCodeAt(i);
+            if ((code >= 65) && (code <= 90))
+                c = String.fromCharCode(((code - 65 + amount) % 26) + 65);
+            else if ((code >= 97) && (code <= 122))
+                c = String.fromCharCode(((code - 97 + amount) % 26) + 97);
+        }
+        res += c;
+    }
+    return res;
+};
+
+export const getToday = () => {
+    let date = new Date()
+    const addZero = (val) => {
+        return val < 10 ? `0${val}` : val
+    }
+
+    return `${date.getFullYear()}-${addZero(date.getMonth())}-${addZero(date.getDate())}`
+}

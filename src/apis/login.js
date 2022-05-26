@@ -1,6 +1,7 @@
 import { fetch } from './fetch'
 import { user } from '../states/loginStates'
 import { getFavouriteList } from './dogs'
+import { getMessageByID, getWorkerMessageByID } from './chat'
 
 export const login = (data) => {
     return fetch("post", "/login", data)
@@ -10,6 +11,7 @@ export const login = (data) => {
             } else {
                 user.setData(res.data)
                 res.data.userType !== 'worker' && getFavouriteList(`${res.data.id}`)
+                res.data.userType === "worker" ? getWorkerMessageByID(res.data.id) : getMessageByID(res.data.id)
                 return true
             }
         })

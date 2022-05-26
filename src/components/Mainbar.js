@@ -19,6 +19,7 @@ import CurrentUser from './CurrentUser';
 
 import ContactUsDialog from './ContactUsDialog';
 import AboutDialog from './AboutDialog';
+import { useNavigate } from 'react-router-dom';
 import { login } from 'src/states/loginStates';
 
 const Menu = () => {
@@ -89,16 +90,18 @@ const Menu = () => {
 // floatingMenuHook
 
 export default function ButtonAppBar() {
+    let navigate = useNavigate()
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" style={{ background: 'none', boxShadow: 'none', padding: '0 15%' }}>
                 <Toolbar>
                     {/* <Menu /> */}
-                    <img src="https://img.icons8.com/cotton/344/dog-jump--v1.png" width="2%" style={{ position: 'relative', bottom: 3, marginRight: 10 }} />
-                    <Typography component="div" sx={{ flexGrow: 1, color: '#171717' }}>
-                        The Shelter
-                    </Typography>
-                    <Button color="inherit" style={{ width: 170, color: '#171717' }} onClick={() =>document.getElementById('floatingMenuHook').scrollIntoView()}>gallery</Button>
+                        <img src="https://img.icons8.com/cotton/344/dog-jump--v1.png" width="2%" style={{ position: 'relative', bottom: 3, marginRight: 10 }} />
+                        <Typography component="div" sx={{ flexGrow: 1, color: '#171717', cursor: 'pointer' }} onClick={() => navigate("/")}>
+                            The Shelter
+                        </Typography>
+                    <Button color="inherit" style={{ width: 170, color: '#171717' }} onClick={() => document.getElementById('floatingMenuHook').scrollIntoView()}>gallery</Button>
                     <AboutDialog />
                     <ContactUsDialog />
                     <CurrentUser />

@@ -1,4 +1,5 @@
 import { types } from 'mobx-state-tree'
+import { messages } from './chatStates'
 
 export const login = types
     .model({
@@ -16,6 +17,19 @@ export const login = types
     }))
     .create({
         isLogin: true
+    })
+
+export const tempUser = types
+    .model({
+        id: types.number
+    })
+    .actions(self => ({
+        setID(id) {
+            self.id = id
+        }
+    }))
+    .create({
+        id: -1
     })
 
 export const user = types
@@ -59,6 +73,8 @@ export const user = types
             self.loginDate = ""
             self.loginTime = ""
             self.token = ""
+
+            messages.clear()
 
             login.setLogin(false)
         }

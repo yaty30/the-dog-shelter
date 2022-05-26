@@ -3,6 +3,20 @@ import { type } from '@testing-library/user-event/dist/type'
 import { types } from 'mobx-state-tree'
 import { breedList } from 'src/utils'
 
+
+export const autocompleteDogList = types
+    .model({
+        breed: types.string
+    })
+    .actions(self => ({
+        setBreed(val) {
+            self.breed = val
+        }
+    }))
+    .create({
+        breed: ""
+    })
+
 export const searchDog = types
     .model({
         breed: types.string,

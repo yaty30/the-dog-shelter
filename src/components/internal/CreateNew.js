@@ -1,7 +1,7 @@
 import react, { useState } from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
+import CircularProgress from '@mui/material/CircularProgress';
+import Backdrop from '@mui/material/Backdrop';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+import { autocompleteDogList } from 'src/states/dogStates';
 import Dialog from '@mui/material/Dialog';
 import Tooltip from '@mui/material/Tooltip';
 import DialogContent from '@mui/material/DialogContent';
@@ -24,22 +25,24 @@ import { floatingMenu } from 'src/states/floatingMenuStates';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import ScaleRoundedIcon from '@mui/icons-material/ScaleRounded';
+import DogListAutocomplete from '../DogListAutocomplete';
 
 import { observer } from 'mobx-react-lite'
-import { breedList, getImageBase64 } from 'src/utils';
+import { breedList, getImageBase64, getToday } from 'src/utils';
 import { ContrastSharp } from '@mui/icons-material';
 import { DialogActions } from '@mui/material';
 import { dogList } from 'src/states/dogStates';
 
 import { addDog } from 'src/apis/dogs';
 import { user } from 'src/states/loginStates';
+import { set } from 'mobx';
 
 export default observer(() => {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [gender, setGender] = useState("");
-    const [breed, setBreed] = useState("");
+    const [load, setLoad] = useState(false);
     const [birthday, setBirthday] = useState("");
     const [chipNo, setChipNo] = useState("");
     const [seterillsed, setSeterillsed] = useState(false);
@@ -50,13 +53,15 @@ export default observer(() => {
     const [image, setImage] = useState("");
     const [imageBase64, setImageBase64] = useState("")
     const [weight, setWeight] = useState("0.0");
+    const [bdayValid, setBdayValid] = useState(false)
 
     const handleClose = () => {
         floatingMenu.cancle()
         setName("")
         setDescription("")
         setGender("")
-        setBreed("")
+        // setBreed("")
+        autocompleteDogList.setBreed("")
         setBirthday("")
         setChipNo("")
         setSeterillsed("")
@@ -91,18 +96,73 @@ export default observer(() => {
     const handleUploadImage = (target) => {
         let url = URL.createObjectURL(target)
         // newItem.uploadImage(url)
-        getImageBase64(target).then(data => 
+        getImageBase64(target).then(data =>
             setImageBase64(data)
         )
         setImage(url)
     }
 
     const addSpace = (val) => {
-        const one = val.substring(0, 3)
-        const two = val.substring(3, 6)
-        const three = val.substring(6, 9)
+        const one = val.replaceAll(" ", "").substring(0, 3)
+        const two = val.replaceAll(" ", "").substring(3, 6)
+        const three = val.replaceAll(" ", "").substring(6, 9)
 
-        return val.length === 9 ? `${one} ${two} ${three}` : val
+        // return val.length === 9 ? `${one} ${two} ${three}` : val
+        if (val.length === 3) {
+            return `${one} `
+        }
+        if (val.length === 7) {
+            return `${one} ${two} `
+        }
+        if (val.length > 7) {
+            return `${one} ${two} ${three}`
+        }
+
+        return val
+    }
+
+    const dayMask = (val) => {
+        const year = val.replaceAll("-", "").substring(0, 4)
+        const month = val.replaceAll("-", "").substring(4, 6)
+        const day = val.replaceAll("-", "").substring(6, 8)
+
+        if (val.length === 4) {
+            return `${year}-`
+        }
+        if (val.length === 7) {
+            return `${year}-${month}-`
+        }
+        if (val.length > 8) {
+            return `${year}-${month}-${day}`
+        }
+
+        return val
+    }
+
+    const bdayValidator = (val) => {
+        const date = new Date()
+        const year = val.replaceAll("-", "").substring(0, 4)
+        const month = val.replaceAll("-", "").substring(4, 6)
+        const day = val.replaceAll("-", "").substring(6, 8)
+
+        // const odd = (month) => {
+        //     let odd = [1, 3, 5, 7, 8, 10, 12]
+        //     if(month === 2) {
+        //         return 28
+        //     }
+        //     if(odd.includes(month)) {
+        //         return 31
+        //     }
+        //     return 30
+        // }
+
+        // let yearValid = +year > 2000 && +year <= +date.getFullYear()
+        // let monthValid = +month >= 1 && +month <= 12
+        // let dayValid = +day >= 1 && +day <= odd(+month)
+
+        // setBdayValid(yearValid && monthValid && dayValid)
+
+        return dayMask(val)
     }
 
     const shouldDisable = () => {
@@ -110,7 +170,7 @@ export default observer(() => {
         const isEmpty = (variable) => {
             return variable === ""
         }
-        const list = [name, gender, location, seterillsed, breed, birthday, chipNo, intake, description, image, notes, size, weight];
+        const list = [name, gender, location, seterillsed, autocompleteDogList.breed, birthday, chipNo, intake, description, image, notes, size, weight];
         list.map(x => result.push(isEmpty(x) ? "1" : "0"))
 
         return result.filter(x => x === "1").legnth > 0
@@ -122,7 +182,7 @@ export default observer(() => {
             gender: gender,
             location: location,
             seterillsed: seterillsed,
-            breed: breed,
+            breed: autocompleteDogList.breed,
             birthday: birthday,
             mircochipNo: chipNo,
             intake: intake,
@@ -134,8 +194,13 @@ export default observer(() => {
             addedBy: "system",
             token: user.getToken()
         }
-        addDog(data)
-        floatingMenu.cancle()
+
+        setLoad(true)
+        setTimeout(() => {
+            addDog(data)
+            floatingMenu.cancle()
+            setLoad(false)
+        }, 1100)
     }
 
     const reBreedList = breedList().map(x => ({
@@ -152,6 +217,12 @@ export default observer(() => {
                 maxWidth="lg"
             >
                 <DialogContent>
+                    <Backdrop
+                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        open={load}
+                    >
+                        <CircularProgress color="inherit" />
+                    </Backdrop>
                     <Grid container>
                         <Grid item xs={12} md={5}>
                             {image !== "" ?
@@ -214,12 +285,30 @@ export default observer(() => {
                                                 )}
                                             </Grid>
                                             <Grid item xs={12} md={6}>
-                                                {SelectMenu(
+                                                {/* {SelectMenu(
                                                     "Breed", breed, (e) => setBreed(e.target.value), reBreedList
-                                                )}
+                                                )} */}
+                                                <DogListAutocomplete edit={{ edit: false, val: "" }} />
                                             </Grid>
                                             <Grid item xs={12} md={6}>
-                                                <TextField label="Birthday" style={{ width: '100%' }} variant="outlined" value={birthday} onChange={(e) => setBirthday(e.target.value)} />
+                                                <TextField
+                                                    type="date" style={{ width: '100%' }}
+                                                    variant="outlined" onKeyDown={(e) => e.key === "Backspace" && setBirthday("")}
+                                                    value={birthday} onChange={(e) => setBirthday(e.target.value)}
+                                                    InputProps={{
+                                                        inputProps: {
+                                                            min: "2000-01-01",
+                                                            max: getToday()
+                                                        }
+                                                    }}
+                                                />
+                                                {/* <DesktopDatePicker
+                                                    label="Date desktop"
+                                                    inputFormat="MM/dd/yyyy"
+                                                    value={birthday}
+                                                    onChange={(e) => setBirthday(e.target.value)}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                /> */}
                                             </Grid>
                                             <Grid item xs={12} md={6}>
                                                 <TextField
@@ -247,15 +336,21 @@ export default observer(() => {
                                                     value={weight} style={{ width: '100%' }}
                                                     label="Weight (Pound)"
                                                     variant="outlined"
-                                                    inputProps={{
-                                                        maxLength: 13,
-                                                        step: "0.1"
+                                                    InputProps={{
+                                                        inputProps: {
+                                                            min: 0,
+                                                            max: 100,
+                                                            step: "0.2",
+                                                        }
                                                     }}
                                                     onChange={(e) => setWeight(parseFloat(e.target.value).toFixed(1))}
                                                 />
                                             </Grid>
                                             <Grid item xs={12} md={6}>
-                                                <TextField label="Intake" style={{ width: '100%' }} variant="outlined" value={intake} onChange={(e) => setIntake(e.target.value)} />
+                                                {SelectMenu(
+                                                    "Intake", intake, (e) => setIntake(e.target.value),
+                                                    [{ label: "Rescue from Stray", value: "stray" }, { label: "Rescued by Inspectors", value: "inspectors" }, { label: "SBO - No idea to take care", value: "SBO" }]
+                                                )}
                                             </Grid>
                                             <Grid item xs={12} md={6}>
                                                 {SelectMenu(
@@ -279,8 +374,9 @@ export default observer(() => {
                         style={{ marginRight: 15, marginBottom: 10, width: 130 }}
                         disabled={
                             name === "" || gender === "" || location === "" || seterillsed === "" ||
-                            breed === "" || birthday === "" || chipNo === "" || intake === "" ||
-                            description === "" || image === "" || size === "" || weight === ""
+                            autocompleteDogList.breed === "" || birthday === "" || chipNo === "" || intake === "" ||
+                            description === "" || image === "" || size === "" || weight === "" || weight === "0" ||
+                            weight === "0.0"
                         }
                         variant="contained"
                     >

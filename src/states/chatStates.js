@@ -11,6 +11,7 @@ const messageData = types
         expired: types.boolean,
         workerID: types.number,
         sendTime: types.string,
+        sendBy: types.number,
         date: types.string,
         time: types.string,
     })
@@ -54,7 +55,9 @@ export const messages = types
                     date: x.date,
                     time: x.time,
                     clientID: x.clientID,
-                    workerID: x.workerID
+                    workerID: x.workerID,
+                    sendBy: x.sendBy,
+                    sendTime: x.sendTime
                 })
             )
 
@@ -63,6 +66,7 @@ export const messages = types
     }))
     .actions(self => ({
         restoreMessage(data) {
+            self.list.clear()
             data.forEach(item =>
                 self.list.push(item)    
             )
@@ -88,17 +92,5 @@ export const messages = types
         }
     }))
     .create({
-        list: [
-            {
-                chatID: "PqSFoijsafWEOPKW",
-                messageID: 93101,
-                message: "test1",
-                clientID: 1,
-                expired: false,
-                workerID: 1,
-                sendTime: "8:25 PM",
-                date: "",
-                time: "",
-            }
-        ]
+        list: []
     })
