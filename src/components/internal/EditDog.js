@@ -38,32 +38,47 @@ import { breedList, getToday } from 'src/utils';
 import { editDog } from 'src/apis/dogs';
 import { user } from "src/states/loginStates";
 
-export default observer((datas) => {
-    const data = datas.datas
-
-    useEffect(() => {
-        autocompleteDogList.setBreed(data.breed)
-    }, [])
+export default observer((datas, index) => {    
+    const data = dogList.list[datas.index]
 
     const [open, setOpen] = useState(false);
-    const [name, setName] = useState(data.name);
-    const [description, setDescription] = useState(data.description);
-    const [gender, setGender] = useState(data.gender);
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
+    const [gender, setGender] = useState("");
     const [breed, setBreed] = useState("");
-    const [birthday, setBirthday] = useState(data.birthday);
-    const [chipNo, setChipNo] = useState(data.mircochipNo);
-    const [seterillsed, setSeterillsed] = useState(data.seterillsed);
-    const [intake, setIntake] = useState(data.intake);
-    const [location, setLocation] = useState(data.location);
-    const [size, setSize] = useState(data.size);
-    const [notes, setNotes] = useState(data.notes);
-    const [image, setImage] = useState(data.profileImage);
-    const [weight, setWeight] = useState(data.weight);
+    const [birthday, setBirthday] = useState("");
+    const [chipNo, setChipNo] = useState("");
+    const [seterillsed, setSeterillsed] = useState("");
+    const [intake, setIntake] = useState("");
+    const [location, setLocation] = useState("");
+    const [size, setSize] = useState("");
+    const [notes, setNotes] = useState("");
+    const [image, setImage] = useState("");
+    const [weight, setWeight] = useState("");
     const [load, setLoad] = useState(false)
     // console.log(data)
 
+    useEffect(() => {
+        autocompleteDogList.setBreed(data.breed)
+        let d = dogList.list[datas.index]
+    }, [])
+
+
     const handleOpen = () => {
         setOpen(true)
+        let d = dogList.list[datas.index]
+        setName(d.name)
+        setDescription(d.description)
+        setGender(d.gender)
+        setBirthday(d.birthday)
+        setChipNo(d.mircochipNo)
+        setSeterillsed(d.seterillsed)
+        setIntake(d.intake)
+        setLocation(d.location)
+        setSize(d.size)
+        setNotes(d.notes)
+        setImage(d.profileImage)
+        setWeight(d.weight)
     }
 
     const handleClose = () => {

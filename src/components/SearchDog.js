@@ -2,7 +2,7 @@ import react, { useState } from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { IconButton, Paper, Divider } from '@mui/material';
+import { IconButton, Paper, Divider, TextField } from '@mui/material';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -22,6 +22,7 @@ export default observer(() => {
     const [gender, setGender] = useState("")
     const [seterillsed, setSeterillsed] = useState("")
     const [location, setLocation] = useState("")
+    const [dogID, setDogID] = useState("")
 
     const open = Boolean(anchorEl);
     const locations = [
@@ -33,8 +34,8 @@ export default observer(() => {
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
-        window.scrollTo(0, document.getElementById("paginationHook").offsetTop)
-
+        // window.scrollTo(0, document.getElementById("paginationHook").offsetTop)
+        setDogID("")
         setBreed("")
         setGender("")
         setSeterillsed("")
@@ -46,6 +47,7 @@ export default observer(() => {
     };
 
     const handleClear = () => {
+        setDogID("")
         setBreed("")
         setGender("")
         setSeterillsed("")
@@ -54,10 +56,15 @@ export default observer(() => {
     };
 
     const predata = {
+        dogID: dogID,
         breed: breed,
         gender: gender,
         seterillsed: seterillsed,
         location: location
+    }
+
+    const replaceNonNumberic = (val) => {
+        return val.replaceAll(/\D/g,'')
     }
 
     return (
@@ -85,6 +92,12 @@ export default observer(() => {
                 }}
             >
                 <Paper elevation={0}>
+                    <MenuItem style={{ width: 350 }}>
+                        <TextField
+                            style={{ width: '100%' }} label="Dog ID"
+                            value={replaceNonNumberic(dogID)} onChange={(e) => setDogID(e.target.value)}
+                        />
+                    </MenuItem>
                     <MenuItem style={{ width: 350 }}>
                         <FormControl fullWidth>
                             <InputLabel id="breed-select-label">Breed</InputLabel>

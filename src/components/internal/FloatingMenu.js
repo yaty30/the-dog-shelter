@@ -25,7 +25,7 @@ const clientActions = [
 const workerActions = [
     { icon: <CreateIcon />, name: 'Create New', },
     { icon: <HelpCenterIcon />, name: 'Chat', },
-    { icon: <FileCopyIcon />, name: '2', },
+    // { icon: <FileCopyIcon />, name: '2', },
 ];
 
 export default observer(() => {

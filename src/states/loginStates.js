@@ -16,7 +16,7 @@ export const login = types
         }
     }))
     .create({
-        isLogin: true
+        isLogin: false
     })
 
 export const tempUser = types

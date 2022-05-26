@@ -1,4 +1,4 @@
-import react, { useState, forwardRef } from 'react';
+import react, { useState, useEffect, forwardRef } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -28,7 +28,7 @@ import { ContrastSharp } from '@mui/icons-material';
 import { dogList, editDogData } from 'src/states/dogStates';
 import { login, user } from 'src/states/loginStates';
 import { favouriteList } from 'src/states/favouriteListStates';
-import { breedList } from 'src/utils';
+import { breedList, urlEncoder } from 'src/utils';
 
 import { IconButton } from '@mui/material';
 import { addFavourite, removeFavourite } from 'src/apis/dogs';
@@ -37,25 +37,26 @@ const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default observer((datas) => {
+export default observer((datas, dogIndex) => {
     const data = datas.data
+    // const dogIndex = indexes
     const [open, setOpen] = useState(false);
     const [isFavourite, setIsFavourite] = useState(favouriteList.onList(data.id))
     const handleClickOpen = () => {
         setOpen(true);
     };
-
     const handleEdit = () => {
         floatingMenu.setClicked("Edit dog")
         console.log(data)
-        editDogData.prepareEditData(data)
     }
 
     const handleClose = () => {
         setOpen(false);
     };
 
-    const date = new Date()
+    useEffect(() => {
+        editDogData.prepareEditData(data)
+    }, [])
 
     const addSpace = (val) => {
         const one = val.replaceAll(" ", "").substring(0, 3)
@@ -115,6 +116,12 @@ export default observer((datas) => {
         removeFavourite(apiData)
     }
 
+    const getShareContent = () => {
+        let content = urlEncoder(`Check out ${data.name}-${data.id} at The Canine Shelter!`) + ` %23theCanineShelter`
+
+        return content
+    }
+
     return (
         <>
             <Card sx={{ maxWidth: 415 }}>
@@ -158,11 +165,13 @@ export default observer((datas) => {
                     </CardContent>
                 </div>
                 <CardActions>
-                    <Button size="small">Share</Button>
+                    <Button size="small" component="label">
+                        <a href={`https://twitter.com/intent/tweet?text=${getShareContent()}`} target="_blank" style={{ color: "#1876D2", textDecoration: 'none' }}>Tweet</a>
+                    </Button>
                     <Button size="small" onClick={handleClickOpen}>Learn More</Button>
                     {login.isLogin === false ? null : user.isClient() ? null :
                         <>
-                            <EditDog datas={data} />
+                            <EditDog datas={data.id} index={datas.dogIndex} />
                             <RemoveDialog data={data.id} />
                         </>
                     }

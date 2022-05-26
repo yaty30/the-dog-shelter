@@ -19,12 +19,16 @@ export const autocompleteDogList = types
 
 export const searchDog = types
     .model({
+        dogID: types.string,
         breed: types.string,
         gender: types.string,
         seterillsed: types.string,
         location: types.string
     })
     .actions(self => ({
+        setDogID(data) {
+          self.dogID = data  
+        },
         setBreed(data) {
             self.breed = data
         },
@@ -45,6 +49,7 @@ export const searchDog = types
         }
     }))
     .create({
+        dogID: "",
         breed: "",
         gender: "",
         seterillsed: "",
@@ -162,7 +167,7 @@ export const dogList = types
     })
     .views(self => ({
         getDog(id) {
-            return self.list.filter(x => x.id === id)
+            return self.list.filter(x => x.id === id)[0]
         },
         getDogList(type, currentPage) {
             const list = self.list.filter(x => x.size.includes(type))
@@ -180,7 +185,9 @@ export const dogList = types
         searchDog() {
             let isSeterillsed = searchDog.seterillsed === "yes" ? true : false
             let list = self.list
-            const breed = searchDog.breed !== "" ? list.filter(x => x.breed === searchDog.breed) : list
+
+            const dogID = searchDog.dogID !== "" ? list.filter(x => +x.id === +searchDog.dogID) : list
+            const breed = searchDog.breed !== "" ? dogID.filter(x => x.breed === searchDog.breed) : dogID
             const gender = searchDog.gender !== "" ? breed.filter(x => x.gender.toLowerCase() === searchDog.gender.toLowerCase()) : breed
             const location = searchDog.location !== "" ? gender.filter(x => x.location === searchDog.location) : gender
             const seterillsed = searchDog.seterillsed !== "" ? location.filter(x => x.seterillsed === isSeterillsed) : location

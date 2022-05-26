@@ -18,6 +18,7 @@ import SearchDog from './SearchDog';
 import { dogList, searchDog } from 'src/states/dogStates';
 import { login, user } from 'src/states/loginStates';
 
+import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite'
 import { getFavouriteList, restoreDogList } from 'src/apis/dogs';
 
@@ -25,6 +26,7 @@ export default observer(() => {
     const [tab, setTab] = useState(0);
     const [page, setPage] = useState(1);
     const [hide, setHide] = useState(true)
+    let navigate = useNavigate()
 
     window.onscroll = function () {
         window.scrollY < 150 ? !!!hide && setHide(true) : hide && setHide(false)
@@ -44,9 +46,6 @@ export default observer(() => {
 
     useEffect(() => {
         restoreDogList()
-        // getFavouriteList({
-        //     id: `${user.getID()}`
-        // })
     }, [])
 
     return (
@@ -85,7 +84,7 @@ export default observer(() => {
                         {dogList.getDogList(tabOptions[tab].value, page).length > 0 ?
                             dogList.getDogList(tabOptions[tab].value, page).map((x, i) =>
                                 <Grid item xs={12} md={4} key={i}>
-                                    <DogCard data={x} />
+                                    <DogCard data={x} dogIndex={page > 1 ? i + (page * 3) : i} />
                                 </Grid>
                             )
                             :

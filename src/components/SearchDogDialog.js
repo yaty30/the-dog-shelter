@@ -18,6 +18,7 @@ export default observer((datas) => {
 
     const handleSearch = () => {
         setOpen(true);
+        searchDog.setDogID(data.dogID)
         searchDog.setBreed(data.breed)
         searchDog.setGender(data.gender)
         searchDog.setSeterillsed(data.seterillsed)

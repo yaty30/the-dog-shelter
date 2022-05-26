@@ -764,3 +764,7 @@ export const getToday = () => {
 
     return `${date.getFullYear()}-${addZero(date.getMonth())}-${addZero(date.getDate())}`
 }
+
+export const urlEncoder = (content) => {
+    return encodeURI(content)
+}
