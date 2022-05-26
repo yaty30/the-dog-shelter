@@ -97,7 +97,7 @@ export default observer((datas, dogIndex) => {
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
-        return age;
+        return age > 1 ? `${age} years old` : `${age} year old`
     }
 
     const intake = [{ label: "Rescue from Stray", value: "stray" }, { label: "Rescued by Inspectors", value: "inspectors" }, { label: "SBO - No idea to take care", value: "SBO" }]
@@ -105,7 +105,7 @@ export default observer((datas, dogIndex) => {
     const list = [
         { label: "Gender", value: data.gender, set: "" },
         { label: "Breed", value: data.breed, set: "" },
-        { label: "Birthday", value: `${data.birthday} (${getAge()} years old)`, set: "" },
+        { label: "Birthday", value: `${data.birthday} (${getAge()})`, set: "" },
         { label: "Size", value: data.size === "L" ? "Large" : data.size === "M" ? "Medium" : "Small", set: "" },
         { label: "Mircochip No", value: addSpace(data.mircochipNo), set: "" },
         { label: "Seterillsed", value: data.seterillsed ? "Yes" : "No", set: "" },
@@ -138,7 +138,7 @@ export default observer((datas, dogIndex) => {
     return (
         <>
             <Card sx={{ maxWidth: 415 }}>
-                {user.isClient() ?
+                {user.isClient() &&
                     <div style={{ position: 'absolute' }}>
                         {
                             favouriteList.onList(+data.id) ?
@@ -152,7 +152,9 @@ export default observer((datas, dogIndex) => {
 
                         }
                     </div>
-                    :
+                }
+                {
+                    login.isLogin === false || !!!user.isClient() &&
                     <div style={{ position: 'absolute', width: '100%' }}>
                         <IconButton onClick={handleMoreClick} style={{ margin: 5, background: 'rgba(244,244,244,0.5)', margin: 10 }} size="small">
                             <MoreHorizIcon style={{ color: '#333', fontSize: 25 }} />
@@ -167,10 +169,10 @@ export default observer((datas, dogIndex) => {
                             }}
                             style={{ marginTop: 10 }}
                         >
-                            <Paper elevation={0} style={{padding: "10px 20px"}}>
+                            <Paper elevation={0} style={{ padding: "10px 20px", width: 90 }}>
                                 <EditDog datas={data.id} index={datas.dogIndex} />
                             </Paper>
-                            <Paper elevation={0} style={{padding: "10px 20px"}}>
+                            <Paper elevation={0} style={{ padding: "10px 20px", width: 90 }}>
                                 <RemoveDialog data={data.id} />
                             </Paper>
                         </Menu>
@@ -192,7 +194,7 @@ export default observer((datas, dogIndex) => {
 
                         <div style={{ marginTop: 15 }}>
                             <Typography>
-                                <FavoriteRoundedIcon style={{ position: 'relative', top: 4, marginRight: 5, color: '#E6A62D', fontSize: 20 }} /> {getAge()} years old
+                                <FavoriteRoundedIcon style={{ position: 'relative', top: 4, marginRight: 5, color: '#E6A62D', fontSize: 20 }} /> {getAge()}
                             </Typography>
                             <Typography>
                                 <ScaleRoundedIcon style={{ position: 'relative', top: 4, marginRight: 5, color: '#E6A62D', fontSize: 20 }} /> {data.weight} pounds
@@ -207,12 +209,6 @@ export default observer((datas, dogIndex) => {
                         </a>
                     </Button>
                     <Button size="small" onClick={handleClickOpen}>Learn More</Button>
-                    {login.isLogin === false ? null : user.isClient() ? null :
-                        <>
-
-
-                        </>
-                    }
                 </CardActions>
             </Card>
             <Dialog

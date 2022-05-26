@@ -162,7 +162,7 @@ export default observer((datas, index) => {
 
     return (
         <>
-            <Button size="small" variant="contained" style={{width: '100%', background: '#E8F0FA', color: '#1876D2'}} onClick={handleOpen}>Edit</Button>
+            <Button size="small" variant="text" style={{width: '100%', background: '#E8F0FA', color: '#1876D2'}} onClick={handleOpen}>Edit</Button>
             <Dialog
                 // open={floatingMenu.clickedMenu === "Edit dog"}
                 open={open}
