@@ -12,6 +12,9 @@ import Divider from '@mui/material/Divider';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import DialogTitle from '@mui/material/DialogTitle';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import Menu from '@mui/material/Menu';
+import Paper from '@mui/material/Paper';
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -42,6 +45,16 @@ export default observer((datas, dogIndex) => {
     // const dogIndex = indexes
     const [open, setOpen] = useState(false);
     const [isFavourite, setIsFavourite] = useState(favouriteList.onList(data.id))
+    const [moreAnchorEl, setMoreAnchorEl] = useState(null);
+    const moreOpen = Boolean(moreAnchorEl);
+    const handleMoreClick = (event) => {
+        setMoreAnchorEl(event.currentTarget);
+    };
+    const handleMoreClose = () => {
+        setMoreAnchorEl(null);
+    };
+
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -125,7 +138,7 @@ export default observer((datas, dogIndex) => {
     return (
         <>
             <Card sx={{ maxWidth: 415 }}>
-                {user.isClient() &&
+                {user.isClient() ?
                     <div style={{ position: 'absolute' }}>
                         {
                             favouriteList.onList(+data.id) ?
@@ -138,6 +151,29 @@ export default observer((datas, dogIndex) => {
                                 </IconButton>
 
                         }
+                    </div>
+                    :
+                    <div style={{ position: 'absolute', width: '100%' }}>
+                        <IconButton onClick={handleMoreClick} style={{ margin: 5, background: 'rgba(244,244,244,0.5)', margin: 10 }} size="small">
+                            <MoreHorizIcon style={{ color: '#333', fontSize: 25 }} />
+                        </IconButton>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={moreAnchorEl}
+                            open={moreOpen}
+                            onClose={handleMoreClose}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                            }}
+                            style={{ marginTop: 10 }}
+                        >
+                            <Paper elevation={0} style={{padding: "10px 20px"}}>
+                                <EditDog datas={data.id} index={datas.dogIndex} />
+                            </Paper>
+                            <Paper elevation={0} style={{padding: "10px 20px"}}>
+                                <RemoveDialog data={data.id} />
+                            </Paper>
+                        </Menu>
                     </div>
                 }
                 <div onClick={handleClickOpen} style={{ cursor: 'pointer' }}>
@@ -165,14 +201,16 @@ export default observer((datas, dogIndex) => {
                     </CardContent>
                 </div>
                 <CardActions>
-                    <Button size="small" component="label">
-                        <a href={`https://twitter.com/intent/tweet?text=${getShareContent()}`} target="_blank" style={{ color: "#1876D2", textDecoration: 'none' }}>Tweet</a>
+                    <Button size="small" component="label" variant="outlined" style={{ marginRight: 5 }}>
+                        <a href={`https://twitter.com/intent/tweet?text=${getShareContent()}`} target="_blank" style={{ color: "#1876D2", textDecoration: 'none' }}>
+                            Share to twitter
+                        </a>
                     </Button>
                     <Button size="small" onClick={handleClickOpen}>Learn More</Button>
                     {login.isLogin === false ? null : user.isClient() ? null :
                         <>
-                            <EditDog datas={data.id} index={datas.dogIndex} />
-                            <RemoveDialog data={data.id} />
+
+
                         </>
                     }
                 </CardActions>

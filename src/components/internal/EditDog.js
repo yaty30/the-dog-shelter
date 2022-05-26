@@ -34,11 +34,11 @@ import { ContrastSharp } from '@mui/icons-material';
 import { DialogActions } from '@mui/material';
 import { dogList } from 'src/states/dogStates';
 import { editDogData } from 'src/states/dogStates';
-import { breedList, getToday } from 'src/utils';
-import { editDog } from 'src/apis/dogs';
+import { breedList, getImageBase64, getToday } from 'src/utils';
+import { editDog, restoreDogList } from 'src/apis/dogs';
 import { user } from "src/states/loginStates";
 
-export default observer((datas, index) => {    
+export default observer((datas, index) => {
     const data = dogList.list[datas.index]
 
     const [open, setOpen] = useState(false);
@@ -54,6 +54,7 @@ export default observer((datas, index) => {
     const [size, setSize] = useState("");
     const [notes, setNotes] = useState("");
     const [image, setImage] = useState("");
+    const [imageBase64, setImageBase64] = useState("")
     const [weight, setWeight] = useState("");
     const [load, setLoad] = useState(false)
     // console.log(data)
@@ -107,6 +108,9 @@ export default observer((datas, index) => {
     const handleUploadImage = (target) => {
         let url = URL.createObjectURL(target)
         // newItem.uploadImage(url)
+        getImageBase64(target).then(data =>
+            setImageBase64(data)
+        )
         setImage(url)
     }
 
@@ -131,7 +135,7 @@ export default observer((datas, index) => {
             mircochipNo: chipNo,
             intake: intake,
             description: description,
-            profileImage: image,
+            profileImage: imageBase64,
             notes: notes,
             size: size,
             weight: +weight,
@@ -143,8 +147,11 @@ export default observer((datas, index) => {
         editDog(prepareData)
         setTimeout(() => {
             // dogList.editDog(data.id, prepareData)
-            setOpen(false)
-            setLoad(false)
+            restoreDogList()
+            setTimeout(() => {
+                setOpen(false)
+                setLoad(false)
+            }, 400)
         }, 1200)
     }
 
@@ -155,7 +162,7 @@ export default observer((datas, index) => {
 
     return (
         <>
-            <Button size="small" onClick={handleOpen}>Edit</Button>
+            <Button size="small" variant="contained" style={{width: '100%', background: '#E8F0FA', color: '#1876D2'}} onClick={handleOpen}>Edit</Button>
             <Dialog
                 // open={floatingMenu.clickedMenu === "Edit dog"}
                 open={open}

@@ -42,8 +42,8 @@ export default observer((data) => {
     return (
         <div>
             <Button
-                size="small" color="secondary"
-                onClick={handleClickOpen} style={{ color: '#EC4444' }}
+                size="small" color="inherit" variant="contained"
+                onClick={handleClickOpen} style={{ color: '#EC4444', background: '#FFEAEA' }}
             >
                 Remove
             </Button>

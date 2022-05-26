@@ -1,5 +1,5 @@
 import react, { useState, useEffect } from 'react'
-import { Grid, Typography, Button, IconButton } from '@mui/material'
+import { Grid, Typography, Button, CircularProgress } from '@mui/material'
 
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -26,6 +26,7 @@ export default observer(() => {
     const [tab, setTab] = useState(0);
     const [page, setPage] = useState(1);
     const [hide, setHide] = useState(true)
+    const [load, setLoad] = useState(true)
     let navigate = useNavigate()
 
     window.onscroll = function () {
@@ -45,7 +46,11 @@ export default observer(() => {
     };
 
     useEffect(() => {
-        restoreDogList()
+        restoreDogList().then(() =>
+            setTimeout(() => {
+                setLoad(false)
+            }, 800)
+        )
     }, [])
 
     return (
@@ -65,51 +70,65 @@ export default observer(() => {
                     </Typography>
                 </div>
 
-                <Grid container spacing={3} justifyContent="center" alignItems="center" direction="row" id="paginationHook">
-                    <Grid item xs={4} />
-                    <Grid item xs={3}>
-                        <Tabs value={tab} onChange={handleChange} centered>
-                            {tabOptions.map((x, i) =>
-                                <Tab label={x.label} />
-                            )}
-                        </Tabs>
+                {!!!load &&
+                    <Grid container spacing={3} justifyContent="center" alignItems="center" direction="row" id="paginationHook">
+                        <Grid item xs={4} />
+                        <Grid item xs={3}>
+                            <Tabs value={tab} onChange={handleChange} centered>
+                                {tabOptions.map((x, i) =>
+                                    <Tab label={x.label} />
+                                )}
+                            </Tabs>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <SearchDog />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={4}>
-                        <SearchDog />
-                    </Grid>
-                </Grid>
 
+                }
                 <div style={{ padding: '0 10%', marginTop: 45 }}>
                     <Grid container spacing={6}>
-                        {dogList.getDogList(tabOptions[tab].value, page).length > 0 ?
-                            dogList.getDogList(tabOptions[tab].value, page).map((x, i) =>
-                                <Grid item xs={12} md={4} key={i}>
-                                    <DogCard data={x} dogIndex={page > 1 ? i + (page * 3) : i} />
+                        {
+                            load ?
+                                <Grid item xs={12} style={{ textAlign: 'center' }}>
+                                    <CircularProgress />
                                 </Grid>
-                            )
-                            :
-                            <Grid item xs={12}>
-                                <Button disabled style={{ width: '100%' }}>No result</Button>
-                            </Grid>
+                                :
+                                dogList.getDogList(tabOptions[tab].value, page).length > 0 ?
+                                    dogList.getDogList(tabOptions[tab].value, page).map((x, i) =>
+                                        <Grid item xs={12} md={4} key={i}>
+                                            <DogCard data={x} dogIndex={page > 1 ? i + (page * 3) : i} />
+                                        </Grid>
+                                    )
+                                    :
+                                    <Grid item xs={12}>
+                                        <Button disabled style={{ width: '100%' }}>No result</Button>
+                                    </Grid>
+
                         }
                     </Grid>
                 </div>
 
                 <Grid container alignItems="center" justifyContent="center">
                     <Grid item xs={12}>
-                        <Pagination
-                            count={dogList.getPageNumber(tabOptions[tab].value)} variant="outlined" shape="rounded"
-                            className="pagination"
-                            onChange={(_, page) => {
-                                if (page !== null) {
-                                    setPage(page);
-                                    window.scrollTo(0, document.getElementById("paginationHook").offsetTop)
-                                }
-                            }}
-                        />
-                        <div style={{ position: 'fixed', zIndex: 999, bottom: 5, right: 5, display: hide ? 'none' : 'block' }}>
-                            <FloatingMenu />
-                        </div>
+                        {!!!load &&
+                            <>
+                                <Pagination
+                                    count={dogList.getPageNumber(tabOptions[tab].value)} variant="outlined" shape="rounded"
+                                    className="pagination"
+                                    onChange={(_, page) => {
+                                        if (page !== null) {
+                                            setPage(page);
+                                            window.scrollTo(0, document.getElementById("paginationHook").offsetTop)
+                                        }
+                                    }}
+                                />
+
+                                <div style={{ position: 'fixed', zIndex: 999, bottom: 5, right: 5, display: hide ? 'none' : 'block' }}>
+                                    <FloatingMenu />
+                                </div>
+                            </>
+                        }
                     </Grid>
                 </Grid>
             </div>

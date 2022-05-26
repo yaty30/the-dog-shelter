@@ -105,7 +105,10 @@ export default observer(() => {
                                 labelId="breed-select-label"
                                 value={breed}
                                 label="Breed"
-                                onChange={(e) => setBreed(e.target.value)}
+                                onChange={(e) => {
+                                    setBreed(e.target.value)
+                                    console.log(breed)
+                                }}
                             >
                                 {breedList().map((x, i) =>
                                     <MenuItem value={x.name} key={i}>{x.name}</MenuItem>

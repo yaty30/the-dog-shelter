@@ -28,7 +28,9 @@ export const restoreDogList = () => {
 export const addDog = (data) => {
     return fetch("post", "/dog/addDog", data)
         .then((x) => {
-            restoreDogList()
+            setTimeout(() => {
+                restoreDogList()
+            }, 700)
 
             console.log(x)
             return x
@@ -47,7 +49,7 @@ export const removeDog = (data) => {
 export const editDog = (data) => {
     return fetch("post", "/dog/updateDog", data)
         .then((x) => {
-            restoreDogList()
+            return x
         })
 }
 
