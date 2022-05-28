@@ -11,7 +11,6 @@ export const login = (data) => {
             } else {
                 user.setData(res.data)
                 res.data.userType !== 'worker' && getFavouriteList(`${res.data.id}`)
-                res.data.userType === "worker" ? getWorkerMessageByID(res.data.id) : getMessageByID(res.data.id)
                 return true
             }
         })
