@@ -1,12 +1,39 @@
 import { fetch } from './fetch'
-import { messages } from 'src/states/chatStates'
+import { chatMessages, messages } from 'src/states/chatStates'
+import { user } from '../states/loginStates'
 
-export const sendMessage = (data) => {
-    return fetch("post", "/chat/sendChatMessage", data)
+export const restoreMessages = () => {
+    return fetch("get", `/chat/restoreMessage?userID=${user.getID()}`)
         .then(res => {
-            return res
+            chatMessages.restoreMessages(res.data)
         })
 }
+
+export const sendMessage = (data) => {
+    return fetch("post", "/chat/replyMessage", data)
+        .then(res => {
+            restoreMessages()
+            console.log(res.data)
+        })
+}
+
+export const createNewChat = (data) => {
+    return fetch("post", "/chat/createNewChat", data)
+        .then(res => {
+            chatMessages.firstMessage(res.data)
+        })
+}
+
+export const deleteMessage = (data) => {
+    console.log(data)
+    return fetch("post", "/chat/deleteMessage", data)
+        .then(res => {
+            restoreMessages()
+        })
+}
+
+
+
 
 export const getMessages = (chatID) => {
     return fetch("get", `/chat/client/getChatMessages?chatID=${chatID}`)

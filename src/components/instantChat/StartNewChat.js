@@ -4,7 +4,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Typography, TextField, InputAdornment, IconButton, CircularProgress } from '@mui/material';
 import SendRounded from '@mui/icons-material/SendRounded';
-import { getMessages, sendMessage } from 'src/apis/chat';
+import { getMessages, createN, createNewChat } from 'src/apis/chat';
 import { observer } from 'mobx-react-lite'
 import { randomString, getDatetime, randomNumber } from 'src/utils';
 import { login, tempUser, user } from 'src/states/loginStates';
@@ -22,23 +22,16 @@ export default observer(() => {
     };
     const handleSend = () => {
         setLoad(true)
-        let chatID = randomString(15)
-        let tempUserID = randomNumber(500, 999)
         let data = {
-            chatID: chatID,
             message: message,
-            clientID: login.Logined() ? user.getID() : tempUserID,
-            workerID: 54469,
-            sendTime: getDatetime("time"),
-            sendBy: login.Logined() ? user.getID() : tempUserID
+            from: user.getID()
         }
-        sendMessage(data).then(() => {
+        createNewChat(data).then(() => {
             setTimeout(() => {
                 setLoad(false)
                 setMessage("")
                 setAnchorEl(null);
-                getMessages(chatID)
-                tempUser.setID(tempUserID)
+                // getMessages(chatID)
             }, 1100)
         })
     }

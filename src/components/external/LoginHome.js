@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite'
 import { login } from 'src/states/loginStates';
 
-export default observer(() => {
+export default observer((data) => {
     const [email, setEmail] = useState("")
     let navigate = useNavigate()
     useEffect(() => {

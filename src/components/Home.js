@@ -21,6 +21,7 @@ import { login, user } from 'src/states/loginStates';
 import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite'
 import { getFavouriteList, restoreDogList } from 'src/apis/dogs';
+import { restoreMessages } from 'src/apis/chat';
 
 export default observer(() => {
     const [tab, setTab] = useState(0);
@@ -51,6 +52,7 @@ export default observer(() => {
                 setLoad(false)
             }, 800)
         )
+        restoreMessages()
     }, [])
 
     return (
@@ -60,6 +62,7 @@ export default observer(() => {
                 <div style={{ width: '100%', textAlign: 'center', margin: '45px 0' }}>
                     <Typography style={{ color: '#E6A62D', fontWeight: 'bold', fontSize: 20 }} id="floatingMenuHook">
                         ADOPT CATS
+                        {user.getID()}
                     </Typography>
                     <Typography style={{ fontWeight: 'bold', color: '#202020', margin: '15px 0', fontSize: 45, fontFamily: '"Outfit", sans-serif' }}>
                         Bring a New Dog Home

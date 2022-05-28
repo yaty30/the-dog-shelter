@@ -2,6 +2,52 @@ import { types } from 'mobx-state-tree'
 import { login, user } from './loginStates'
 import { getDatetime, randomNumber } from 'src/utils'
 
+const chatMessageData = types
+    .model({
+        message: types.string,
+        from: types.number,
+        to: types.number,
+        date: types.string,
+        time: types.string,
+        chatID: types.string,
+        messageID: types.string,
+        orderID: types.number
+    })
+
+export const chatMessages = types
+    .model({
+        messages: types.array(chatMessageData)
+    })
+    .views(self => ({
+        getChats() {
+            let chats = self.messages.map(x => x.chatID)
+            let result = [...new Set(chats)]
+            return result
+        },
+        getMessagesByChatID(id) {
+            return self.messages.filter(x => x.chatID === id)
+        },
+        getReplyTo(chatID) {
+            let from = self.getMessagesByChatID(chatID)[0].from
+            let to = self.getMessagesByChatID(chatID)[0].to
+            return from === user.getID() ? to : from
+        }
+    }))
+    .actions(self => ({
+        firstMessage(item) {
+            self.messages.clear()
+            self.messages.push(item)
+        },
+        restoreMessages(item) {
+            self.messages.clear()
+            item.forEach(data => self.messages.push(data))
+            console.log(JSON.stringify(self.messages))
+        }
+    }))
+    .create({
+        messages: []
+    })
+
 const messageData = types
     .model({
         chatID: types.string,
@@ -30,7 +76,7 @@ export const messages = types
             return list[0].clientID
         },
         getRooms() {
-            const messages = self.list 
+            const messages = self.list
             const roomsPre = messages.map(x => ({
                 chatID: x.chatID,
                 messages: []
@@ -44,9 +90,9 @@ export const messages = types
             return roomList
         },
         getMessage() {
-            const messages = self.list 
+            const messages = self.list
             let list = self.getRooms()
-            
+
             messages.map(x =>
                 list[list.findIndex(r => r.chatID === x.chatID)].messages.push({
                     chatID: x.chatID,
@@ -68,7 +114,7 @@ export const messages = types
         restoreMessage(data) {
             self.list.clear()
             data.forEach(item =>
-                self.list.push(item)    
+                self.list.push(item)
             )
         },
         sendMessage(data) {

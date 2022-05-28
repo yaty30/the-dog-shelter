@@ -16,12 +16,12 @@ import Box from '@mui/material/Box';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import StartNewChat from './StartNewChat'
 
-import { messages } from 'src/states/chatStates';
+import { chatMessages, messages } from 'src/states/chatStates';
 
 import { observer } from 'mobx-react-lite'
 import { login, tempUser, user } from 'src/states/loginStates';
 import { getDatetime } from 'src/utils';
-import { getMessages, sendMessage } from 'src/apis/chat';
+import { deleteMessage, getMessages, sendMessage } from 'src/apis/chat';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -86,40 +86,36 @@ export default observer(() => {
     ]
 
     const DeleteButton = (id) => {
+        const handleDelete = () => {
+            let delData = {
+                chatID: chatMessages.getChats()[tab],
+                messageID: id.id
+            }
+            deleteMessage(delData)
+        }
+
         return (
-            <IconButton onClick={() => messages.deleteMessage(id.id)}>
+            <IconButton onClick={() => handleDelete(id.id)}>
                 <DeleteForeverRoundedIcon style={{ fontSize: 23, color: '#fff' }} />
             </IconButton>
         )
     }
 
     const handleSendMessage = () => {
-        // let data = {
-        //     chatID: messages.getRooms()[tab].chatID,
-        //     message: msg,
-        //     workerID: user.id
-        // }
-
-        // messages.sendMessage(data)
-
-
         let data = {
-            chatID: messages.getRooms()[tab].chatID,
+            chatID: chatMessages.getChats()[tab],
             message: msg,
-            clientID: login.Logined() ? user.getID() : tempUser.id,
-            workerID: 54469,
-            sendTime: getDatetime("time"),
-            sendBy: login.Logined() ? user.getID() : tempUser.id
+            from: user.getID(),
+            to: chatMessages.getReplyTo(chatMessages.getChats()[tab]),
         }
         sendMessage(data).then(() => {
             setMsg("")
-            getMessages(messages.getRooms()[tab].chatID)
         })
     }
 
     const sort = (arr) => {
-        return arr.sort(function(a, b) {
-            return Date.parse(a.time) - Date.parse(b.time)
+        return arr.sort(function (a, b) {
+            return a.orderID - b.orderID
         });
     }
 
@@ -131,7 +127,7 @@ export default observer(() => {
                 fullWidth
                 maxWidth="md"
             >
-                {messages.getRooms().length === 0 ?
+                {chatMessages.messages.length === 0 ?
                     <DialogContent>
                         <Grid container spacing={3} direction="row" justifyContent="center" alignItems="center" style={{ height: 500 }}>
                             <Grid item xs={12} style={{ textAlign: 'center' }}>
@@ -145,8 +141,8 @@ export default observer(() => {
                             <Box sx={{ width: '100%' }}>
                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                     <Tabs value={tab} onChange={handleChange} aria-label="basic tabs example">
-                                        {messages.getRooms().map((x, i) =>
-                                            <Tab label={`Chat Room: ${x.chatID}`} {...a11yProps(i)} />
+                                        {chatMessages.getChats().map((x, i) =>
+                                            <Tab label={`Chat Room: ${x}`} {...a11yProps(i)} />
                                         )}
                                     </Tabs>
                                 </Box>
@@ -155,14 +151,14 @@ export default observer(() => {
                         <DialogContent style={{ padding: '10px 35px', overflow: 'hidden' }}>
                             <Grid container spacing={3} className="chatDialogDiv">
                                 <Grid item xs={12}>
-                                    {messages.getRooms().map((x, i) =>
+                                    {chatMessages.getChats().map((x, i) =>
                                         <TabPanel value={tab} index={i}>
                                             <Grid container spacing={3}>
-                                                {sort(messages.getMessageByChatID(messages.getRooms()[i].chatID)[0].messages).map((m, mi) =>
+                                                {sort(chatMessages.getMessagesByChatID(x)).map((m, mi) =>
                                                     <>
-                                                        {(m.sendBy === user.id || m.sendBy === tempUser.id) && <Grid item xs={7} />}
-                                                        <Grid item xs={5} style={{ textAlign: m.sendBy === user.id || m.sendBy === tempUser.id ? 'right' : 'left' }}>
-                                                            <Tooltip title={login.isLogin === false ? "" : login.isLogin && user.isClient() ? "" : <DeleteButton id={m.messageID} />} placement={m.sendBy === user.id ? "right" : "left"} arrow disabled>
+                                                        {(m.from === user.id) && <Grid item xs={7} />}
+                                                        <Grid item xs={5} style={{ textAlign: m.from === user.id ? 'right' : 'left' }}>
+                                                            <Tooltip title={login.isLogin && user.isClient() ? "" : <DeleteButton id={m.messageID} />} placement={m.from === user.id ? "right" : "left"} arrow disabled>
                                                                 <TextField
                                                                     variant="outlined" size="small"
                                                                     style={{ width: '100%', cursor: 'default', background: '#f1f1f1' }}
@@ -173,9 +169,9 @@ export default observer(() => {
                                                                     multiline value={`${m.message}`}
                                                                 />
                                                             </Tooltip>
-                                                            <Typography style={{ color: '#aaa', fontSize: 11, padding: '0 5px', marginTop: 3, textTransform: 'uppercase' }}>{m.sendTime}</Typography>
+                                                            <Typography style={{ color: '#aaa', fontSize: 11, padding: '0 5px', marginTop: 3, textTransform: 'uppercase' }}>{m.time}</Typography>
                                                         </Grid>
-                                                        {(m.sendBy !== user.id || m.sendBy !== tempUser.id) && <Grid item xs={7} />}
+                                                        {(m.from !== user.id) && <Grid item xs={7} />}
                                                     </>
                                                 )}
                                             </Grid>
