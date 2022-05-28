@@ -127,9 +127,11 @@ export default observer(() => {
                                     }}
                                 />
 
-                                <div style={{ position: 'fixed', zIndex: 999, bottom: 5, right: 5, display: hide ? 'none' : 'block' }}>
-                                    <FloatingMenu />
-                                </div>
+                                {user.isLogined() &&
+                                    <div style={{ position: 'fixed', zIndex: 999, bottom: 5, right: 5, display: hide ? 'none' : 'block' }}>
+                                        <FloatingMenu />
+                                    </div>
+                                }
                             </>
                         }
                     </Grid>
