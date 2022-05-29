@@ -11,7 +11,8 @@ const chatMessageData = types
         time: types.string,
         chatID: types.string,
         messageID: types.string,
-        orderID: types.number
+        orderID: types.number,
+        messageType: types.string
     })
 
 export const chatMessages = types
@@ -48,16 +49,23 @@ export const chatMessages = types
         messages: []
     })
 
-const messageData = types
+export const sendFavDog = types
     .model({
-        chatID: types.string,
-        messageID: types.number,
-        message: types.string,
-        clientID: types.number,
-        expired: types.boolean,
-        workerID: types.number,
-        sendTime: types.string,
-        sendBy: types.number,
-        date: types.string,
-        time: types.string,
+        image: types.string,
+        name: types.string,
+        id: types.number
+    })
+    .actions(self => ({
+        prepareData(data) {
+            self.image = data.image
+            self.name = data.name
+            self.id = data.id
+
+            console.log(data)
+        }
+    }))
+    .create({
+        image: "",
+        name: "",
+        id: 0
     })

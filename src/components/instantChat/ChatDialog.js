@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import react, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { instantChat } from 'src/states/globalDialogStates';
 import { floatingMenu } from 'src/states/floatingMenuStates';
-import { Grid, Chip, TextField, Tooltip, InputAdornment, IconButton, Divider, Typography } from '@mui/material';
+import { Grid, CardMedia, Card, TextField, Tooltip, InputAdornment, IconButton, Divider, Typography } from '@mui/material';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
@@ -16,12 +16,14 @@ import Box from '@mui/material/Box';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import StartNewChat from './StartNewChat'
 
+import ChatFavList from './ChatFavList';
+
 import { chatMessages, messages } from 'src/states/chatStates';
 
 import { observer } from 'mobx-react-lite'
 import { login, tempUser, user } from 'src/states/loginStates';
 import { getDatetime } from 'src/utils';
-import { deleteMessage, getMessages, sendMessage } from 'src/apis/chat';
+import { deleteMessage, getMessages, restoreMessages, sendMessage } from 'src/apis/chat';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -107,6 +109,7 @@ export default observer(() => {
             message: msg,
             from: user.getID(),
             to: chatMessages.getReplyTo(chatMessages.getChats()[tab]),
+            messageType: "string"
         }
         sendMessage(data).then(() => {
             setMsg("")
@@ -114,6 +117,7 @@ export default observer(() => {
     }
 
     const sort = (arr) => {
+        console.log(JSON.stringify(arr))
         return arr.sort(function (a, b) {
             return a.orderID - b.orderID
         });
@@ -153,28 +157,43 @@ export default observer(() => {
                                 <Grid item xs={12}>
                                     {chatMessages.getChats().map((x, i) =>
                                         <TabPanel value={tab} index={i}>
-                                            {console.log(JSON.stringify(sort(chatMessages.getMessagesByChatID(x))))}
                                             <Grid container spacing={3}>
-                                                {sort(chatMessages.getMessagesByChatID(x)).map((m, mi) =>
-                                                    <>
-                                                        {(m.from === user.id) && <Grid item xs={7} />}
-                                                        <Grid item xs={5} style={{ textAlign: m.from === user.id ? 'right' : 'left' }}>
-                                                            <Tooltip title={login.isLogin && user.isClient() ? "" : <DeleteButton id={m.messageID} />} placement={m.from === user.id ? "right" : "left"} arrow disabled>
-                                                                <TextField
-                                                                    variant="outlined" size="small"
-                                                                    style={{ width: '100%', cursor: 'default', background: '#f1f1f1' }}
-                                                                    className="chatMessage"
-                                                                    InputProps={{
-                                                                        readOnly: true
-                                                                    }}
-                                                                    multiline value={`${m.message}`}
-                                                                />
-                                                            </Tooltip>
-                                                            <Typography style={{ color: '#aaa', fontSize: 11, padding: '0 5px', marginTop: 3, textTransform: 'uppercase' }}>{m.time}</Typography>
-                                                        </Grid>
-                                                        {(m.from !== user.id) && <Grid item xs={7} />}
-                                                    </>
-                                                )}
+                                                {sort(chatMessages.getMessagesByChatID(x)).map((m, mi) => {
+                                                    return (
+                                                        <>
+                                                            {(m.from === user.id) && <Grid item xs={7} />}
+                                                            <Grid item xs={5} style={{ textAlign: m.from === user.id ? 'right' : 'left' }}>
+                                                                <Tooltip title={login.isLogin && user.isClient() ? "" : <DeleteButton id={m.messageID} />} placement={m.from === user.id ? "right" : "left"} arrow disabled>
+                                                                    {m.messageType === "string" ?
+                                                                        <TextField
+                                                                            variant="outlined" size="small"
+                                                                            style={{ width: '100%', cursor: 'default', background: '#f1f1f1' }}
+                                                                            className="chatMessage"
+                                                                            InputProps={{
+                                                                                readOnly: true
+                                                                            }}
+                                                                            multiline value={`${m.message}`}
+                                                                        />
+                                                                        :
+                                                                        <Card key={i}>
+                                                                            <CardMedia
+                                                                                component="img"
+                                                                                image={JSON.parse(atob(m.message)).image}
+                                                                            />
+                                                                            <Typography gutterBottom component="div" style={{ margin: '10px 0', textAlign: 'center' }}>
+                                                                                I'm interested in this dog!<br />
+                                                                                {JSON.parse(atob(m.message)).name}
+                                                                                <span style={{ fontWeight: 'bold', marginLeft: 5 }}>#{JSON.parse(atob(m.message)).id}</span>
+                                                                            </Typography>
+                                                                        </Card>
+                                                                    }
+                                                                </Tooltip>
+                                                                <Typography style={{ color: '#aaa', fontSize: 11, padding: '0 5px', marginTop: 3, textTransform: 'uppercase' }}>{m.time}</Typography>
+                                                            </Grid>
+                                                            {(m.from !== user.id) && <Grid item xs={7} />}
+                                                        </>
+                                                    )
+                                                })}
                                             </Grid>
                                         </TabPanel>
                                     )}
@@ -193,6 +212,11 @@ export default observer(() => {
                                     value={msg}
                                     onChange={(e) => setMsg(e.target.value)}
                                     InputProps={{
+                                        startAdornment:
+                                            user.isClient() &&
+                                            <InputAdornment position="start">
+                                                <ChatFavList chatID={chatMessages.getChats()[tab]} replyTo={chatMessages.getReplyTo(chatMessages.getChats()[tab])} />
+                                            </InputAdornment>,
                                         endAdornment:
                                             <InputAdornment position="end">
                                                 <IconButton onClick={handleSendMessage}>

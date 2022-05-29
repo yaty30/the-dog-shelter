@@ -16,6 +16,7 @@ import { login, user } from 'src/states/loginStates';
 
 import { floatingMenu } from 'src/states/floatingMenuStates';
 import { observer } from 'mobx-react-lite'
+import { restoreMessages } from '../../apis/chat'
 
 const clientActions = [
     { icon: <HelpCenterIcon />, name: 'Chat', },
@@ -31,6 +32,7 @@ const workerActions = [
 export default observer(() => {
     const handleClick = (name) => {
         floatingMenu.setClicked(name)
+        name === "Chat" && restoreMessages()
     }
 
     return (
@@ -67,8 +69,8 @@ export default observer(() => {
                             tooltipTitle={action.name === "Chat" ? "Instant Chat" : action.name}
                             onClick={() => handleClick(action.name)}
                         />
-                    ))    
-            }
+                    ))
+                }
             </SpeedDial>
         </Box>
     );

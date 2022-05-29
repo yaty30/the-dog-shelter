@@ -29,6 +29,7 @@ import { cesar } from 'src/utils';
 
 
 import { observer } from 'mobx-react-lite'
+import { preFillEmail } from 'src/states/registerStates';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -75,6 +76,7 @@ export default observer(() => {
 
     const handleClose = () => {
         setOpen(false);
+        preFillEmail.setEmail("")
     };
 
     useEffect(() => {

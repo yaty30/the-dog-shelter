@@ -5,6 +5,7 @@ import { user } from '../states/loginStates'
 export const restoreMessages = () => {
     return fetch("get", `/chat/restoreMessage?userID=${user.getID()}`)
         .then(res => {
+            console.error(res.data)
             chatMessages.restoreMessages(res.data)
         })
 }

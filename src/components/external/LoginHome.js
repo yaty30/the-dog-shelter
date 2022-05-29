@@ -71,7 +71,8 @@ export default observer((data) => {
                 <Grid item xs={5} style={{ textAlign: 'center' }}>
                     <div style={{ marginTop: 25 }}>
                         <TextField
-                            variant="filled" type="text" label="Email Address"
+                            variant="filled" type="email" label="Email Address"
+                            autoComplete="off"
                             value={preFillEmail.value} onChange={(e) => preFillEmail.setEmail(e.target.value)}
                             style={{ background: '#f1f1f1', borderRadius: 5, width: '100%' }}
                             onKeyPress={(e) => {
