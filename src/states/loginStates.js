@@ -31,6 +31,40 @@ export const tempUser = types
         id: -1
     })
 
+export const userProfile = types
+    .model({
+        id: types.number,
+        username: types.string,
+        userType: types.string,
+        email: types.string
+    })
+    .views(self => ({
+        getProfileData() {
+            return [
+                {
+                    id: self.id,
+                    username: self.username,
+                    userType: self.userType,
+                    email: self.email
+                }
+            ]
+        }
+    }))
+    .actions(self => ({
+        setData(data) {
+            self.id = data.id
+            self.username = data.username
+            self.userType = data.userType
+            self.email = data.email
+        }
+    }))
+    .create({
+        id: 999,
+        username: "",
+        userType: "",
+        email: ""
+    })
+
 export const user = types
     .model({
         id: types.number,

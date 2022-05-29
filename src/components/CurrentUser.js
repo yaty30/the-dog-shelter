@@ -8,6 +8,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavouriteList from './FavouriteList'
 import LoginIcon from '@mui/icons-material/Login';
+import ProfileDialog from './ProfileDialog'
 
 import { useNavigate } from 'react-router-dom';
 
@@ -68,8 +69,7 @@ export default observer(() => {
                     horizontal: 'center',
                 }}
             >
-                {login.isLogin && <MenuItem onClick={handleClose}>Profile</MenuItem>}
-                {login.isLogin && <MenuItem onClick={handleClose}>My account</MenuItem>}
+                {login.isLogin && <ProfileDialog />}
                 {user.isClient() && <FavouriteList />}
                 {login.isLogin && <MenuItem onClick={handleLogout}>Logout</MenuItem>}
                 {!!!login.isLogin && <MenuItem onClick={handleLogout}>Create Account</MenuItem>}

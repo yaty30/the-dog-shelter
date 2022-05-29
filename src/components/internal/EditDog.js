@@ -61,7 +61,6 @@ export default observer((datas, index) => {
 
     useEffect(() => {
         autocompleteDogList.setBreed(data.breed)
-        let d = dogList.list[datas.index]
     }, [])
 
 
@@ -135,7 +134,7 @@ export default observer((datas, index) => {
             mircochipNo: chipNo,
             intake: intake,
             description: description,
-            profileImage: imageBase64,
+            profileImage: imageBase64 === "" ? dogList.list[datas.index].profileImage : imageBase64,
             notes: notes,
             size: size,
             weight: +weight,
