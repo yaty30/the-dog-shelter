@@ -7,6 +7,7 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavouriteList from './FavouriteList'
+import LoginIcon from '@mui/icons-material/Login';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -51,7 +52,7 @@ export default observer(() => {
                     // onClick={handleClick}
                     onMouseOver={handleClick}
                 >
-                    <AccountCircleRoundedIcon />
+                    {login.isLogin ? <AccountCircleRoundedIcon style={{color: '#3BB9EE'}} /> : <LoginIcon style={{color:'#F5973A'}}/>}
                 </IconButton>
             }
             <Menu

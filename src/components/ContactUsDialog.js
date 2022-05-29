@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import react, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,6 +14,7 @@ export default observer(() => {
     const [open, setOpen] = useState(false);
     const [curr, setCurr] = useState(0)
     const [load, setLoad] = useState(false)
+    const [mapLoad, setMapLoad] = useState(true)
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [message, setMessage] = useState("")
@@ -21,6 +22,11 @@ export default observer(() => {
         "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.8223047129254!2d114.12906631541946!3d22.28472004909061!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3403ff9b25ea1c9d%3A0x37bb4ce36628b4c!2sBrilliant%20Court%2C%2028%20Praya%2C%20Kennedy%20Town%2C%20Kennedy%20Town!5e0!3m2!1sen!2shk!4v1653465431631!5m2!1sen!2shk"
     )
 
+    useEffect(() => {
+        setTimeout(() => {
+            setMapLoad(false)
+        }, 500)
+    })
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -49,6 +55,19 @@ export default observer(() => {
                 messageBar.open("Your message cannot be sent, please try again.", "error")
             }
         })
+    }
+
+    const handleMapChange = (index) => {
+        let zeroMap = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.8223047129254!2d114.12906631541946!3d22.28472004909061!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3403ff9b25ea1c9d%3A0x37bb4ce36628b4c!2sBrilliant%20Court%2C%2028%20Praya%2C%20Kennedy%20Town%2C%20Kennedy%20Town!5e0!3m2!1sen!2shk!4v1653465431631!5m2!1sen!2shk"
+        let oneMap = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3687.530515981034!2d114.14946851542122!3d22.44668984323632!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x340408226c396587%3A0xb14c8435eaf522f0!2s6%20Shek%20Lin%20Rd%2C%20Tai%20Po!5e0!3m2!1sen!2shk!4v1653465548392!5m2!1sen!2shk"
+        
+        setMapLoad(true)
+        setCurr(index)
+        setAddr(index === 0 ? zeroMap : oneMap)
+
+        setTimeout(() => {
+            setMapLoad(false)
+        }, 1200)
     }
 
     return (
@@ -86,10 +105,7 @@ export default observer(() => {
                                         marginBottom: 15, textTransform: 'none',
                                         width: '100%', textAlign: 'center'
                                     }}
-                                    onClick={() => {
-                                        setAddr("https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.8223047129254!2d114.12906631541946!3d22.28472004909061!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3403ff9b25ea1c9d%3A0x37bb4ce36628b4c!2sBrilliant%20Court%2C%2028%20Praya%2C%20Kennedy%20Town%2C%20Kennedy%20Town!5e0!3m2!1sen!2shk!4v1653465431631!5m2!1sen!2shk")
-                                        setCurr(0)
-                                    }}
+                                    onClick={() => handleMapChange(0)}
                                 >
                                     Shop 4, G/F, Brilliant Court, Sai Hong Lane, No.28 Praya, Kennedy Town, Hong Kong
                                 </Button>
@@ -101,10 +117,7 @@ export default observer(() => {
                                         marginBottom: 15, textTransform: 'none',
                                         width: '100%', textAlign: 'center'
                                     }}
-                                    onClick={() => {
-                                        setAddr("https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3687.530515981034!2d114.14946851542122!3d22.44668984323632!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x340408226c396587%3A0xb14c8435eaf522f0!2s6%20Shek%20Lin%20Rd%2C%20Tai%20Po!5e0!3m2!1sen!2shk!4v1653465548392!5m2!1sen!2shk")
-                                        setCurr(1)
-                                    }}
+                                    onClick={() => handleMapChange(1)}
                                 >
                                     6 Shek Lin Road, Tai Po, Hong Kong
                                 </Button>
@@ -130,11 +143,15 @@ export default observer(() => {
                                 >
                                     Email: info@thecanineshelter.com
                                 </Button>
-                                <iframe
-                                    src={addr}
-                                    style={{ border: 0, borderRadius: 5 }} width="100%" height="200"
-                                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                                />
+                                {mapLoad ?
+                                    <Button disabled style={{ width: '100%', marginTop: 35 }}><CircularProgress /></Button>
+                                    :
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.8223047129254!2d114.12906631541946!3d22.28472004909061!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3403ff9b25ea1c9d%3A0x37bb4ce36628b4c!2sBrilliant%20Court%2C%2028%20Praya%2C%20Kennedy%20Town%2C%20Kennedy%20Town!5e0!3m2!1sen!2shk!4v1653465431631!5m2!1sen!2shk"
+                                        style={{ border: 0, borderRadius: 5 }} width="100%" height="200"
+                                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                                    />
+                                }
                             </Grid>
                             <Grid item xs={7}>
                                 <TextField

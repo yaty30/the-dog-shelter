@@ -61,8 +61,7 @@ export default observer(() => {
             <div style={{ margin: 25 }}>
                 <div style={{ width: '100%', textAlign: 'center', margin: '45px 0' }}>
                     <Typography style={{ color: '#E6A62D', fontWeight: 'bold', fontSize: 20 }} id="floatingMenuHook">
-                        ADOPT CATS
-                        {user.getID()}
+                        ADOPT DOGS
                     </Typography>
                     <Typography style={{ fontWeight: 'bold', color: '#202020', margin: '15px 0', fontSize: 45, fontFamily: '"Outfit", sans-serif' }}>
                         Bring a New Dog Home
@@ -127,7 +126,7 @@ export default observer(() => {
                                     }}
                                 />
 
-                                {user.isLogined() &&
+                                {user.username !== "" &&
                                     <div style={{ position: 'fixed', zIndex: 999, bottom: 5, right: 5, display: hide ? 'none' : 'block' }}>
                                         <FloatingMenu />
                                     </div>

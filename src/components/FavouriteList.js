@@ -47,12 +47,17 @@ export default observer(() => {
                     My Favorite Dog List
                 </DialogTitle>
                 <List>
-                    {favouriteList.getList().map((x, i) =>
-                        <>
-                            <FavouriteListDogCard data={x} />
-                            {favouriteList.getList().length > 1 && i !== favouriteList.getList().length - 1 && <Divider variant="middle" />}
-                        </>
-                    )}
+                    {favouriteList.getList().length === 0 ?
+                        <ListItem>
+                            <Button disabled style={{width: '100%',height: 150}}> No Favorite Dog in the List</Button>
+                        </ListItem>
+                        :
+                        favouriteList.getList().map((x, i) =>
+                            <>
+                                <FavouriteListDogCard data={x} />
+                                {favouriteList.getList().length > 1 && i !== favouriteList.getList().length - 1 && <Divider variant="middle" />}
+                            </>
+                        )}
                 </List>
             </Dialog>
         </div>

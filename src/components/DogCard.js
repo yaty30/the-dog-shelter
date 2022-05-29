@@ -15,6 +15,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Menu from '@mui/material/Menu';
 import Paper from '@mui/material/Paper';
+import GirlIcon from '@mui/icons-material/FemaleRounded';
+import BoyIcon from '@mui/icons-material/MaleRounded';
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -186,7 +188,7 @@ export default observer((datas, dogIndex) => {
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div" style={{ fontFamily: '"Lexend", sans-serif' }}>
-                            {data.name}
+                            {data.name} <span style={{ position: 'relative', top: data.gender === "Male" ? 4 : 2 }}>{data.gender === "Male" ? <BoyIcon style={{ color: '#2CA6D9' }} /> : <GirlIcon style={{ color: '#F47ADE' }} />}</span>
                         </Typography>
                         <Typography variant="body2" color="text.secondary" style={{ margin: '25px 0', height: 50 }}>
                             {data.description.substring(0, 121)}...

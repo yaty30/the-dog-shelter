@@ -142,7 +142,7 @@ export default observer(() => {
                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                     <Tabs value={tab} onChange={handleChange} aria-label="basic tabs example">
                                         {chatMessages.getChats().map((x, i) =>
-                                            <Tab label={`Chat Room: ${x}`} {...a11yProps(i)} />
+                                            <Tab label={`Chat Room ${i + 1}`} {...a11yProps(i)} />
                                         )}
                                     </Tabs>
                                 </Box>
@@ -153,6 +153,7 @@ export default observer(() => {
                                 <Grid item xs={12}>
                                     {chatMessages.getChats().map((x, i) =>
                                         <TabPanel value={tab} index={i}>
+                                            {console.log(JSON.stringify(sort(chatMessages.getMessagesByChatID(x))))}
                                             <Grid container spacing={3}>
                                                 {sort(chatMessages.getMessagesByChatID(x)).map((m, mi) =>
                                                     <>

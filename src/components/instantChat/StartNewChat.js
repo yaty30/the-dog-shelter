@@ -39,15 +39,17 @@ export default observer(() => {
     return (
         <div>
             <Button
-                variant="outlined" color="inherit"
+                variant={user.isClient() ? "outlined" : "text"}
+                color="inherit"
                 style={{ color: '#666', height: 50 }}
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
+                disabled={!!!user.isClient()}
             >
-                Start a new chat
+                {user.isClient() ? "Start a new chat" : "No message yet"}
             </Button>
             <Menu
                 id="basic-menu"

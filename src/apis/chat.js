@@ -10,6 +10,7 @@ export const restoreMessages = () => {
 }
 
 export const sendMessage = (data) => {
+    console.log(data)
     return fetch("post", "/chat/replyMessage", data)
         .then(res => {
             restoreMessages()
