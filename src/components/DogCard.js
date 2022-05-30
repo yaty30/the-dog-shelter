@@ -11,7 +11,7 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
-import DialogTitle from '@mui/material/DialogTitle';
+import Chip from '@mui/material/Chip';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Menu from '@mui/material/Menu';
 import Paper from '@mui/material/Paper';
@@ -244,6 +244,15 @@ export default observer((datas, dogIndex) => {
                                     <Typography gutterBottom component="div" style={{ fontSize: 20, fontFamily: '"Lusitana", serif' }}>
                                         <span style={{ marginLeft: 0 }}>{data.description}</span>
                                     </Typography>
+                                    {/* <Divider style={{ margin: '20px 0' }} />
+                                    <Grid container spacing={3}>
+                                        {["Calm", "Sympathetic", "Sociable", "Calm"].map((c, i) =>
+                                            <Grid item xs={3}>
+                                                <Chip label={c} key={i} variant="outlined" style={
+                                                    data.gender === "Male" ? { color: '#75B7FB', borderColor: '#75B7FB' } : { color: '#FB8D8D', borderColor: '#FB8D8D' }} />
+                                            </Grid>
+                                        )}
+                                    </Grid> */}
                                     <div style={{ margin: '35px 0 5px 0' }}>
 
                                         <Grid container spacing={3}>

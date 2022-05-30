@@ -134,6 +134,9 @@ export default observer(() => {
                             </>
                         }
                     </Grid>
+                    <Grid item xs={12} style={{ background: '#f1f1f1', minHeight: 100, marginTop: 25, textAlign: 'center' }}>
+                            <Typography style={{marginTop: 65,color: '#999'}}>The Canine Shelter @ 2022</Typography>
+                    </Grid>
                 </Grid>
             </div>
         </div>

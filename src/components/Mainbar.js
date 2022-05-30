@@ -99,9 +99,9 @@ export default function ButtonAppBar() {
                     {/* <Menu /> */}
                         <img src="https://img.icons8.com/cotton/344/dog-jump--v1.png" width="2%" style={{ position: 'relative', bottom: 3, marginRight: 10 }} />
                         <Typography component="div" sx={{ flexGrow: 1, color: '#171717', cursor: 'pointer' }} onClick={() => navigate("/")}>
-                            The Shelter
+                            The Canine Shelter
                         </Typography>
-                    <Button color="inherit" style={{ width: 170, color: '#171717' }} onClick={() => document.getElementById('floatingMenuHook').scrollIntoView()}>gallery</Button>
+                    <Button color="inherit" style={{ width: 170, color: '#171717' }} onClick={() => document.getElementById('floatingMenuHook').scrollIntoView()}>Dogs</Button>
                     <AboutDialog />
                     <ContactUsDialog />
                     <CurrentUser />
